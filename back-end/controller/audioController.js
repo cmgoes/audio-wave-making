@@ -3,6 +3,7 @@ const AudioModel = require('../model/audio_model').audios
 const { exec } = require('child_process');
 const path = require('path');
 const md5 = require('md5')
+const fs = require('fs');
 
 const { MUSICURL, JSONURL } = require('../db')
 
@@ -42,4 +43,21 @@ exports.getAudios = async (req, res, next) => {
             data: BSC.TEXT_SERVER_ERROR
         })
     }
+}
+
+exports.getJson = async (req, res, next) => {
+    fs.readFile(`${path.join(JSONURL, req.body.filename)}`, (err, data) => {
+        if (err) {
+            return res.json({
+                status: false,
+                data: BSC.TEXT_FILE_NOT_FOUND_ERROR
+            })
+        } else {
+            let json_data = JSON.parse(data);
+            return res.json({
+                status: true,
+                data: json_data
+            })
+        }
+    });
 }

@@ -35,10 +35,10 @@ export default function Components(props) {
         {...rest}
       />
       <Grid container className={classes.root}>
-        <Grid item md={3}>
+        <Grid item md={3} xs={12}>
           <ControlPanel />
         </Grid>
-        <Grid item md={9}>
+        <Grid item md={9} xs={12}>
           <GraphContent />
         </Grid>
       </Grid>

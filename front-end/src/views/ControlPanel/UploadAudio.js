@@ -4,12 +4,15 @@ import classNames from "classnames";
 // // react components for routing our app without refresh
 // import { Link } from "react-router-dom";
 // @material-ui/core components
+import { useDispatch, useSelector } from "react-redux";
+
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/control-panel.js";
 import { Avatar, Button, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Snackbar, Typography } from "@material-ui/core";
 import { GraphicEq, PlayArrow } from "@material-ui/icons";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Axios } from '../../redux/services';
+import { audioList, selectedAudio } from '../../redux/actions/audio'
 
 const useStyles = makeStyles(styles);
 
@@ -19,12 +22,14 @@ function Alert(props) {
 
 export default function UploadAudio(props) {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const [openAlert, setOpenAlert] = useState({
         open: false,
         status: "success",
         text: ""
     })
-    const [audios, setAudios] = useState([]);
+
+    const audios = useSelector(state => state.audio.audioList)
 
     const uploadAudio = async (e) => {
         if (!e.target.files[0] || (e.target.files[0] && e.target.files[0].type.indexOf("audio") === -1)) {
@@ -38,7 +43,7 @@ export default function UploadAudio(props) {
         const response = await Axios({ url: 'api/audio/uploadAudio', data: formData })
         if (response.status) {
             setOpenAlert({ ...openAlert, open: true, status: "success", text: "An audio file has been uploaded successfully!" })
-            setAudios(response.data)
+            dispatch(audioList(response.data))
         }
     }
 
@@ -48,9 +53,17 @@ export default function UploadAudio(props) {
 
     const loadAudios = async () => {
         const response = await Axios({ url: 'api/audio/getAudios' })
-        console.log(`response`, response)
         if (response.status) {
-            setAudios(response.data)
+            dispatch(audioList(response.data))
+        }
+    }
+
+    const loadAudioJson = async (e) => {
+        const response = await Axios({ url: 'api/audio/getJson', data: { filename: e.json_name } })
+        if (response.status) {
+            dispatch(selectedAudio({id: e._id, data: response.data}))
+        } else {
+            setOpenAlert({ ...openAlert, open: true, status: "error", text: response.data })
         }
     }
 
@@ -74,7 +87,7 @@ export default function UploadAudio(props) {
                 <List>
                     {
                         audios.map((item, i) => (
-                            <ListItem key={i} button className={classes.audioListItem}>
+                            <ListItem key={i} button className={classes.audioListItem} onClick={() => loadAudioJson(item)}>
                                 <ListItemAvatar>
                                     <Avatar>
                                         <GraphicEq />
