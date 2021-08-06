@@ -30,6 +30,7 @@ export default function UploadAudio(props) {
     })
 
     const audios = useSelector(state => state.audio.audioList)
+    const currentAudio = useSelector(state => state.audio.selectedAudio)
 
     const uploadAudio = async (e) => {
         if (!e.target.files[0] || (e.target.files[0] && e.target.files[0].type.indexOf("audio") === -1)) {
@@ -47,17 +48,6 @@ export default function UploadAudio(props) {
         }
     }
 
-    useEffect(() => {
-        loadAudios()
-    }, [])
-
-    const loadAudios = async () => {
-        const response = await Axios({ url: 'api/audio/getAudios' })
-        if (response.status) {
-            dispatch(audioList(response.data))
-        }
-    }
-
     const loadAudioJson = async (e) => {
         const response = await Axios({ url: 'api/audio/getJson', data: { filename: e.json_name } })
         if (response.status) {
@@ -68,7 +58,7 @@ export default function UploadAudio(props) {
     }
 
     return (
-        <div className={classes.uploadAudio}>
+        <div className={classNames(classes.uploadAudio, classes.p10)}>
             <Typography variant="h5">LOAD A SOUND</Typography>
             <Typography variant="body2" className={classes.uploadDescription}>Create or upload your own sound, or choose from your library below.</Typography>
             <Typography variant="caption" color="primary">Max file size: 40mb</Typography>
@@ -87,7 +77,7 @@ export default function UploadAudio(props) {
                 <List>
                     {
                         audios.map((item, i) => (
-                            <ListItem key={i} button className={classes.audioListItem} onClick={() => loadAudioJson(item)}>
+                            <ListItem key={i} button className={classes.audioListItem} onClick={() => loadAudioJson(item)} style={{border: currentAudio && currentAudio.id === item._id ? "1px solid #ffba39" : "none"}}>
                                 <ListItemAvatar>
                                     <Avatar>
                                         <GraphicEq />

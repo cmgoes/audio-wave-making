@@ -11,6 +11,7 @@ import styles from "assets/jss/control-panel.js";
 import { Box, Tab, Tabs, Typography } from "@material-ui/core";
 import { ColorLens, MusicNote, Tune, FontDownload, Print, AspectRatio } from "@material-ui/icons";
 import UploadAudio from './UploadAudio';
+import SetColor from './SetColor';
 
 const useStyles = makeStyles(styles);
 
@@ -75,7 +76,7 @@ export default function ControlPanel(props) {
                 <UploadAudio />
             </TabPanel>
             <TabPanel className={classes.tabPanel} value={activeTab} index={1}>
-                Set Color
+                <SetColor />
             </TabPanel>
             <TabPanel className={classes.tabPanel} value={activeTab} index={2}>
                 Set Style

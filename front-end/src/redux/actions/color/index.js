@@ -1,0 +1,11 @@
+export const colorList = (data) => {
+    return dispatch => {
+        dispatch({ type: 'COLORLIST', data })
+    }
+}
+
+export const selectedColor = (data) => {
+    return dispatch => {
+        dispatch({ type: 'SELECTEDCOLOR', data })
+    }
+}

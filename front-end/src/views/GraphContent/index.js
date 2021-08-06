@@ -9,14 +9,15 @@ export default function GraphContent(props) {
 	const classes = useStyles();
 
 	const audio_data = useSelector(state => state.audio.selectedAudio)
-
+	const selectedColors = useSelector(state => state.color.selectedColor)
+	
 	useEffect(() => {
 		if (!audio_data) return;
 		// consts
 		const canvasHeight = 600
 		const canvasWidth = "100%"
 		const contentHeight = 300 // as max, half of canvas height
-		const numth = 60 // able to control the bar width
+		const numth = 700 // able to control the bar width
 		const barRadius = 0
 
 		//---------------------------- data modify ----------------------------
@@ -51,18 +52,34 @@ export default function GraphContent(props) {
 			.attr('width', canvasWidth)
 
 		const barWidth = svgCanvas.node().scrollWidth / cus_frequencies.length
+		
+		var divide_frequency = Math.max(...cus_frequencies) / selectedColors.color.length;
+		var divide_frequencies = [];
+		for (let i = 0; i < selectedColors.color.length; i++) {
+			divide_frequencies.push(divide_frequency * (i + 1))
+		}
+		console.log(`divide_frequencies`, divide_frequencies)
 
 		svgCanvas.selectAll('rect')
 			.data(cus_frequencies).enter()
 			.append('rect')
 			.attr('width', barWidth)
 			.attr('height', (datapoint) => datapoint * 2)
-			.attr('fill', 'orange')
+			.attr('fill', (datapoint) => {
+				if (datapoint <= divide_frequencies[0]) {
+					return selectedColors.color[0].color
+				}
+				for (let i = 0; i < divide_frequencies.length - 1; i++) {
+					if (divide_frequencies[i] < datapoint && datapoint <= divide_frequencies[i +1] ) {
+						return selectedColors.color[i + 1].color
+					}
+				}
+			})
 			.attr('rx', barRadius)
 			.attr('ry', barRadius)
 			.attr('x', (datapoint, iteration) => iteration * barWidth)
 			.attr('y', (datapoint) => (canvasHeight / 2) - datapoint)
-	}, [audio_data])
+	}, [audio_data, selectedColors])
 
 	return (
 		<div className={classes.graphContent}>
