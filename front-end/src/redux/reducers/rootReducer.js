@@ -5,11 +5,13 @@ import { combineReducers } from 'redux'
 import auth from './auth'
 import audio from './audio'
 import color from './color'
+import style from './style'
 
 const rootReducer = combineReducers({
   auth,
   audio,
-  color
+  color,
+  style
 })
 
 export default rootReducer

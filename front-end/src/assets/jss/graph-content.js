@@ -9,7 +9,7 @@ const popoverStyles = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "10% 20px"
+        // padding: "10% 20px"
     }
 };
 

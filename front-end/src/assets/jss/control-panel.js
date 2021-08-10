@@ -35,6 +35,13 @@ const popoverStyles = {
         alignItems: "flex-start !important",
         padding: "10%"
     },
+    setStyle: {
+        height: "100%",
+        padding: "10px"
+    },
+    graphTypes: {
+        flexDirection: "row"
+    },
 
 
     ////////////////
@@ -47,11 +54,23 @@ const popoverStyles = {
     p10: {
         padding: "10px"
     },
+    ph10: {
+        padding: "0 10px"
+    },
     pt10: {
         paddingTop: "10px"
     },
     mt10: {
         marginTop: "10px"
+    },
+    mt20: {
+        marginTop: "20px"
+    },
+    mt40: {
+        marginTop: "40px"
+    },
+    mb20: {
+        marginBottom: "20px"
     },
     mh5: {
         margin: "0 5px"
@@ -98,6 +117,15 @@ const popoverStyles = {
     aCenter: {
         alignItems: "center"
     },
+    sCenter: {
+        alignSelf: "center"
+    },
+    sRight: {
+        alignSelf: "flex-end"
+    },
+    sLeft: {
+        alignSelf: "flex-start"
+    },
     modal: {
         display: "flex",
         alignItems: "center",
@@ -113,6 +141,13 @@ const popoverStyles = {
         top: "20px",
         right: "20px"
     },
+    divideBar: {
+        width: "90%",
+        height: "1px",
+        backgroundColor: "#3a85893d",
+        borderRadius: "50%",
+        marginLeft: "5%",
+    }
 };
 
 export default popoverStyles;

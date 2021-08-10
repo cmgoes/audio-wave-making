@@ -12,6 +12,7 @@ import { Box, Tab, Tabs, Typography } from "@material-ui/core";
 import { ColorLens, MusicNote, Tune, FontDownload, Print, AspectRatio } from "@material-ui/icons";
 import UploadAudio from './UploadAudio';
 import SetColor from './SetColor';
+import SetStyle from './SetStyle';
 
 const useStyles = makeStyles(styles);
 
@@ -79,7 +80,7 @@ export default function ControlPanel(props) {
                 <SetColor />
             </TabPanel>
             <TabPanel className={classes.tabPanel} value={activeTab} index={2}>
-                Set Style
+                <SetStyle />
             </TabPanel>
             <TabPanel className={classes.tabPanel} value={activeTab} index={3}>
                 Set Text
