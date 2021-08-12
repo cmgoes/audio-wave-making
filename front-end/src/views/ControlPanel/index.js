@@ -57,6 +57,7 @@ export default function ControlPanel(props) {
     };
     return (
         <div className={classes.controlPanel}>
+            <Typography variant="h5" className={classes.header}>Audio Visualization</Typography>
             <Tabs
                 value={activeTab}
                 onChange={handleChange}

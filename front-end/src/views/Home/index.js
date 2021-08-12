@@ -69,7 +69,7 @@ export default function Components(props) {
 
   return (
     <React.Fragment>
-      <Header
+      {/* <Header
         brand="Audio Visualization"
         rightLinks={<HeaderLinks />}
         fixed
@@ -79,12 +79,12 @@ export default function Components(props) {
           color: "white",
         }}
         {...rest}
-      />
+      /> */}
       <Grid container className={classes.root}>
-        <Grid item md={3} xs={12}>
+        <Grid item md={4} lg={3} sm={5} xs={12}>
           <ControlPanel />
         </Grid>
-        <Grid item md={9} xs={12}>
+        <Grid item md={8} lg={9} sm={7} xs={12}>
           <GraphContent />
         </Grid>
       </Grid>

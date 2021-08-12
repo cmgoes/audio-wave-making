@@ -1,7 +1,7 @@
 // **  Initial State
 const initialState = {
     graph_type: "bar",
-    bar_width: 2000,
+    bar_width: 2,
     bar_space: 0,
     circle_radius: 0,
     circle_rotate: 0,

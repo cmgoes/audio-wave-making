@@ -1,7 +1,7 @@
 const popoverStyles = {
     controlPanel: {
         backgroundColor: "#fff",
-        height: "100%"
+        height: "100%",
     },
     controlTabs: {
         padding: "5px 0 10px 0"
@@ -10,8 +10,17 @@ const popoverStyles = {
         minWidth: 'unset'
     },
     tabPanel: {
-        height: `calc(100% - 63px)`,
-        backgroundColor: "#f5f5f5"
+        height: `calc(100% - 330px)`,
+        backgroundColor: "#f5f5f5",
+        overflowY: "auto"
+    },
+    header: {
+        height: "75px",
+        padding: "20px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        backgroundColor: "#f9f9f9",
     },
 
     ////////////////

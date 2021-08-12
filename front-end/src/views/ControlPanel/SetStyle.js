@@ -28,6 +28,7 @@ export default function SetStyle(props) {
         dispatch(handleGraphType(e))
     }
 
+
     return (
         <div className={classes.setStyle}>
             <Grid className={classes.title}>
@@ -54,9 +55,9 @@ export default function SetStyle(props) {
                     <Typography variant="subtitle2" className={classes.sLeft}>Thinness</Typography>
                     <RCSlider
                         value={bar_width}
-                        min={74}
-                        step={bar_width < 300 ? 1 : 100}
-                        max={2000}
+                        min={2}
+                        step={1}
+                        max={75}
                         onChange={(e, value) => dispatch(handleBarWidth(value))}
                     />
                 </Grid>

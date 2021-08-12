@@ -20,10 +20,12 @@ export default function GraphContent(props) {
 	useEffect(() => {
 		if (!audio_data) return;
 		// consts
-		const canvasHeight = 600
-		const canvasWidth = window.innerWidth * 9 / 12 - 45
-		const contentHeight = 300 // as max, half of canvas height
-		const numth = graphType === "bar" ? bar_width : bar_width / 2 - 7 // able to control the bar width    min 74 max 2000      radial min 30
+		const canvasHeight = 4800
+		const canvasWidth = 6000
+		const paddingVirtical = 300
+		const paddingHorizontal = 1000
+		const contentHeight = canvasHeight / 2 - paddingVirtical // as max, half of canvas height: ;
+		const numth = (canvasWidth - paddingHorizontal) / bar_width //graphType === "bar" ? bar_width : bar_width / 2 - 7 // able to control the bar width    min 74 max 2000      radial min 30
 		const barRadius = bar_shape
 		const innerRadius = circle_radius
 		const outerRadius = Math.min(canvasWidth, canvasHeight) / 2;
@@ -37,15 +39,27 @@ export default function GraphContent(props) {
 
 		if (frequency_data.length > 100) {
 			var n = Number((frequency_data.length / numth).toFixed());
-			for (let i = 0; i < frequency_data.length; i++) {
-				if (i % n === 0) {
-					cus_frequencies.push(frequency_data[i])
-				}
+			var n2 = n
+			var c = 0;
+			while (c < frequency_data.length){
+				var sl = frequency_data.slice(c, n)
+				var average = (sl.reduce((a, b) => a + b, 0) / sl.length).toFixed()
+				cus_frequencies.push(average)
+				c = n
+				n = n + n2
 			}
-			if (cus_frequencies.length !== frequency_data.length) {
-				cus_frequencies.push(frequency_data[0])
-				cus_frequencies.push(frequency_data[frequency_data.length - 1])
-			}
+			
+			// for (let i = 0; i < frequency_data.length; i++) {
+			// 	if (i % n === 0) {
+			// 		cus_frequencies.push(frequency_data[i])
+			// 	}
+			// }
+			// if (cus_frequencies.length !== frequency_data.length) {
+			// 	cus_frequencies.push(frequency_data[0])
+			// 	cus_frequencies.push(frequency_data[frequency_data.length - 1])
+			// }
+		} else {
+			cus_frequencies = frequency_data
 		}
 
 		for (let i = 0; i < cus_frequencies.length; i++) {
@@ -60,8 +74,9 @@ export default function GraphContent(props) {
 
 		const svgCanvas = d3.select("#graph_content")
 			.append('svg')
-			.attr('height', canvasHeight)
-			.attr('width', canvasWidth)
+			.attr('xmlns', 'http://www.w3.org/2000/svg')
+			.attr('viewBox', `0 0 ${canvasWidth} ${canvasHeight}`)
+			.attr('style', `background-color: ${"white"}`)
 
 		const barWidth = svgCanvas.node().scrollWidth / cus_frequencies.length
 
@@ -74,7 +89,7 @@ export default function GraphContent(props) {
 			svgCanvas.selectAll('rect')
 				.data(cus_frequencies).enter()
 				.append('rect')
-				.attr('width', barWidth)
+				.attr('width', bar_width)
 				.attr('height', (datapoint) => datapoint * 2)
 				.attr('fill', (datapoint) => {
 					if (datapoint <= divide_frequencies[0]) {
@@ -88,7 +103,7 @@ export default function GraphContent(props) {
 				})
 				.attr('rx', barRadius)
 				.attr('ry', barRadius)
-				.attr('x', (datapoint, iteration) => iteration * barWidth)
+				.attr('x', (datapoint, iteration) => iteration * bar_width + paddingHorizontal / 2)
 				.attr('y', (datapoint) => (canvasHeight / 2) - datapoint)
 		} else {
 			// X scale
