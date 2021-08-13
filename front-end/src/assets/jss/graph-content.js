@@ -2,7 +2,7 @@ const popoverStyles = {
     graphContent: {
         height: "100%",
         backgroundColor: "#ffedd5",
-        // padding: "15px"
+        padding: "0 15px"
     },
     audioGraph: {
         // backgroundColor: "#fff",

@@ -52,12 +52,12 @@ export default function SetStyle(props) {
             <Grid className={classes.divideBar}></Grid>
             <Grid className={classes.ph10}>
                 <Grid className={classNames(classes.mt20)} container direction="column" alignItems="center">
-                    <Typography variant="subtitle2" className={classes.sLeft}>Thinness</Typography>
+                    <Typography variant="subtitle2" className={classes.sLeft}>Width</Typography>
                     <RCSlider
                         value={bar_width}
                         min={2}
                         step={1}
-                        max={75}
+                        max={graphType === "bar" ? 75 : 210}
                         onChange={(e, value) => dispatch(handleBarWidth(value))}
                     />
                 </Grid>
@@ -66,8 +66,8 @@ export default function SetStyle(props) {
                     <RCSlider
                         value={bar_space}
                         min={0}
-                        step={graphType === "bar" ? 5 : 0.001}
-                        max={graphType === "bar" ? 50 : 0.02}
+                        step={graphType === "bar" ? 1 : 0.001}
+                        max={graphType === "bar" ? 75 : 0.015}
                         onChange={(e, value) => dispatch(handleBarSpace(value))}
                     />
                 </Grid>
@@ -79,7 +79,7 @@ export default function SetStyle(props) {
                                 value={bar_shape}
                                 min={0}
                                 step={1}
-                                max={50}
+                                max={400}
                                 onChange={(e, value) => dispatch(handleBarShape(value))}
                             />
                         </Grid>
@@ -90,8 +90,8 @@ export default function SetStyle(props) {
                                 <RCSlider
                                     value={circle_radius}
                                     min={0}
-                                    step={5}
-                                    max={200}
+                                    step={1}
+                                    max={2500}
                                     onChange={(e, value) => dispatch(handleRadius(value))}
                                 />
                             </Grid>
