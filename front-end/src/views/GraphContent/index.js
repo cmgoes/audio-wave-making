@@ -25,7 +25,7 @@ export default function GraphContent(props) {
 		const paddingVirtical = 300
 		const paddingHorizontal = 1000
 		const contentHeight = canvasHeight / 2 - paddingVirtical // as max, half of canvas height: ;
-		const numth = (canvasWidth - paddingHorizontal) / (bar_width + bar_space) //graphType === "bar" ? bar_width : bar_width / 2 - 7 // able to control the bar width    min 74 max 2000      radial min 30
+		const numth = (canvasWidth - paddingHorizontal) / (graphType === "bar" ? (bar_width + bar_space) : bar_width) //graphType === "bar" ? bar_width : bar_width / 2 - 7 // able to control the bar width    min 74 max 2000      radial min 30
 		const barRadius = bar_shape
 		const innerRadius = circle_radius
 		const outerRadius = Math.min(canvasWidth, canvasHeight) / 2;
@@ -112,6 +112,7 @@ export default function GraphContent(props) {
 			const x = d3.scaleBand()
 				.range([0, 2 * Math.PI])    // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
 				.align(0)                  // This does nothing ?
+				.padding(bar_space / 600)
 				.domain(cus_frequencies.map(d => d)); // The domain of the X axis is the list of states.
 
 			// Y scale
@@ -138,7 +139,7 @@ export default function GraphContent(props) {
 					.outerRadius(d => y(d))
 					.startAngle(d => x(d) + circle_rotate)
 					.endAngle(d => x(d) + x.bandwidth() + circle_rotate)
-					.padAngle(bar_space)
+					// .padAngle(bar_space)
 				)
 		}
 	}, [audio_data, selectedColors, graphType, bar_width, bar_space, circle_radius, circle_rotate, bar_shape])

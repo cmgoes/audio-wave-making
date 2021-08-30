@@ -55,6 +55,17 @@ const popoverStyles = {
     graphTypes: {
         flexDirection: "row"
     },
+    tourComplete: {
+        height: "100%",
+        padding: "10px"
+    },
+    footerNavigation: {
+        height: "80px",
+        padding: "20px 10px"
+    },
+    loginModal: {
+        width: "350px"
+    },
 
 
     ////////////////

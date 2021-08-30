@@ -9,10 +9,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/control-panel.js";
 
 import { Box, Tab, Tabs, Typography } from "@material-ui/core";
-import { ColorLens, MusicNote, Tune, FontDownload, Print, AspectRatio } from "@material-ui/icons";
+import { ColorLens, MusicNote, Tune, FontDownload, Print, AspectRatio, CheckCircle } from "@material-ui/icons";
 import UploadAudio from './UploadAudio';
 import SetColor from './SetColor';
 import SetStyle from './SetStyle';
+import TourComplete from './TourComplete';
+import FooterNavigation from 'views/Components/FooterNavigation';
+import Login from "views/Auth/Login";
+import Register from "views/Auth/Register";
 
 const useStyles = makeStyles(styles);
 
@@ -50,11 +54,25 @@ function a11yProps(index) {
 
 export default function ControlPanel(props) {
     const classes = useStyles();
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(1);
+    const [openLogin, setOpenLogin] = useState(false);
+    const [openRegister, setOpenRegister] = useState(false)
+    const tabs = [1, 2, 3, 6]
 
     const handleChange = (event, activeTab) => {
         setActiveTab(activeTab);
     };
+
+    const handleLoginModal = () => {
+        setOpenRegister(false)
+        setOpenLogin(!openLogin)
+    }
+
+    const handleRegisterModal = () => {
+        setOpenLogin(false)
+        setOpenRegister(!openRegister)
+    }
+
     return (
         <div className={classes.controlPanel}>
             <Typography variant="h5" className={classes.header}>Audio Visualization</Typography>
@@ -67,12 +85,13 @@ export default function ControlPanel(props) {
                 textColor="primary"
                 className={classes.controlTabs}
             >
-                <Tab className={classes.controlTab} icon={<MusicNote />} aria-label="Audio" {...a11yProps(0)} />
-                <Tab className={classes.controlTab} icon={<ColorLens />} aria-label="Color" {...a11yProps(1)} />
-                <Tab className={classes.controlTab} icon={<Tune />} aria-label="Style" {...a11yProps(2)} />
-                <Tab className={classes.controlTab} icon={<FontDownload />} aria-label="Text" {...a11yProps(3)} />
-                <Tab className={classes.controlTab} icon={<Print />} aria-label="Print" {...a11yProps(4)} />
-                <Tab className={classes.controlTab} icon={<AspectRatio />} aria-label="Size" {...a11yProps(5)} />
+                {/* <Tab className={classes.controlTab} icon={<MusicNote />} aria-label="Audio" value={0} {...a11yProps(0)} /> */}
+                <Tab className={classes.controlTab} icon={<ColorLens />} aria-label="Color" value={1} {...a11yProps(1)} />
+                <Tab className={classes.controlTab} icon={<Tune />} aria-label="Style" value={2} {...a11yProps(2)} />
+                <Tab className={classes.controlTab} icon={<FontDownload />} aria-label="Text" value={3} {...a11yProps(3)} />
+                {/* <Tab className={classes.controlTab} icon={<Print />} aria-label="Print" value={4} {...a11yProps(4)} /> */}
+                {/* <Tab className={classes.controlTab} icon={<AspectRatio />} aria-label="Size" value={5} {...a11yProps(5)} /> */}
+                <Tab className={classes.controlTab} icon={<CheckCircle />} aria-label="Size" value={6} {...a11yProps(6)} />
             </Tabs>
             <TabPanel className={classes.tabPanel} value={activeTab} index={0}>
                 <UploadAudio />
@@ -92,6 +111,12 @@ export default function ControlPanel(props) {
             <TabPanel className={classes.tabPanel} value={activeTab} index={5}>
                 Set Size
             </TabPanel>
+            <TabPanel className={classes.tabPanel} value={activeTab} index={6}>
+                <TourComplete />
+            </TabPanel>
+            <FooterNavigation activeTab={activeTab} tabs={tabs} handleActiveTab={setActiveTab} handleLogin={setOpenLogin} />
+            <Login open={openLogin} handleOpenModal={handleLoginModal} handleRegisterModal={handleRegisterModal} />
+            <Register open={openRegister} handleOpenModal={handleRegisterModal} handleLoginModal={handleLoginModal} />
         </div>
     );
 }

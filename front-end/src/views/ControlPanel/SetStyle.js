@@ -66,8 +66,8 @@ export default function SetStyle(props) {
                     <RCSlider
                         value={bar_space}
                         min={0}
-                        step={graphType === "bar" ? 1 : 0.001}
-                        max={graphType === "bar" ? 75 : 0.015}
+                        step={1}
+                        max={75}
                         onChange={(e, value) => dispatch(handleBarSpace(value))}
                     />
                 </Grid>
