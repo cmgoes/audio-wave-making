@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from 'prop-types';
 // // nodejs library that concatenates classes
 // import classNames from "classnames";
@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/control-panel.js";
 
-import { Box, Tab, Tabs, Typography } from "@material-ui/core";
+import { Box, Grid, Tab, Tabs, Typography } from "@material-ui/core";
 import { ColorLens, MusicNote, Tune, FontDownload, Print, AspectRatio, CheckCircle } from "@material-ui/icons";
 import UploadAudio from './UploadAudio';
 import SetColor from './SetColor';
@@ -17,6 +17,9 @@ import TourComplete from './TourComplete';
 import FooterNavigation from 'views/Components/FooterNavigation';
 import Login from "views/Auth/Login";
 import Register from "views/Auth/Register";
+import Header from "views/Components/Header";
+import { useDispatch, useSelector } from "react-redux";
+import { handleActiveTab } from "redux/actions/auth";
 
 const useStyles = makeStyles(styles);
 
@@ -54,13 +57,15 @@ function a11yProps(index) {
 
 export default function ControlPanel(props) {
     const classes = useStyles();
-    const [activeTab, setActiveTab] = useState(1);
+    const dispatch = useDispatch();
+    const userData = JSON.parse(localStorage.getItem("userData"))
+    const activeTab = useSelector(state => state.auth.activeTab);
     const [openLogin, setOpenLogin] = useState(false);
     const [openRegister, setOpenRegister] = useState(false)
-    const tabs = [1, 2, 3, 6]
+    const tabs = userData ? [0, 1, 2, 3, 4, 5] : [7, 1, 2, 3, 6]
 
     const handleChange = (event, activeTab) => {
-        setActiveTab(activeTab);
+        dispatch(handleActiveTab(activeTab));
     };
 
     const handleLoginModal = () => {
@@ -75,7 +80,7 @@ export default function ControlPanel(props) {
 
     return (
         <div className={classes.controlPanel}>
-            <Typography variant="h5" className={classes.header}>Audio Visualization</Typography>
+            <Header />
             <Tabs
                 value={activeTab}
                 onChange={handleChange}
@@ -85,14 +90,33 @@ export default function ControlPanel(props) {
                 textColor="primary"
                 className={classes.controlTabs}
             >
-                {/* <Tab className={classes.controlTab} icon={<MusicNote />} aria-label="Audio" value={0} {...a11yProps(0)} /> */}
+                {
+                    userData ?
+                        <Tab className={classes.controlTab} icon={<MusicNote />} aria-label="Audio" value={0} {...a11yProps(0)} />
+                        : null
+                }
                 <Tab className={classes.controlTab} icon={<ColorLens />} aria-label="Color" value={1} {...a11yProps(1)} />
                 <Tab className={classes.controlTab} icon={<Tune />} aria-label="Style" value={2} {...a11yProps(2)} />
                 <Tab className={classes.controlTab} icon={<FontDownload />} aria-label="Text" value={3} {...a11yProps(3)} />
-                {/* <Tab className={classes.controlTab} icon={<Print />} aria-label="Print" value={4} {...a11yProps(4)} /> */}
-                {/* <Tab className={classes.controlTab} icon={<AspectRatio />} aria-label="Size" value={5} {...a11yProps(5)} /> */}
-                <Tab className={classes.controlTab} icon={<CheckCircle />} aria-label="Size" value={6} {...a11yProps(6)} />
+                {
+                    userData ? <Tab className={classes.controlTab} icon={<Print />} aria-label="Print" value={4} {...a11yProps(4)} /> : null
+                }
+                {
+                    userData ?
+                        <Tab className={classes.controlTab} icon={<AspectRatio />} aria-label="Size" value={5} {...a11yProps(5)} />
+                        : <Tab className={classes.controlTab} icon={<CheckCircle />} aria-label="Size" value={6} {...a11yProps(6)} />
+                }
+                <Tab className={classes.controlTab} aria-label="Welcome message" style={{ display: "none" }} value={7} {...a11yProps(7)} />
             </Tabs>
+            <TabPanel className={classes.tabPanel} value={activeTab} index={7}>
+                <div className={classes.p10}>
+                    <Grid className={classes.title}>
+                        <Typography variant="h4">WELCOME!</Typography>
+                        <Typography variant="body1" className={classes.uploadDescription}>{`We’ve loaded a demo sound so you can play around and see how this works.`}</Typography>
+                        <Typography variant="body1" className={classes.uploadDescription}>{`Begin our short tutorial or create your own sound wave at any time.`}</Typography>
+                    </Grid>
+                </div>
+            </TabPanel>
             <TabPanel className={classes.tabPanel} value={activeTab} index={0}>
                 <UploadAudio />
             </TabPanel>
@@ -114,7 +138,7 @@ export default function ControlPanel(props) {
             <TabPanel className={classes.tabPanel} value={activeTab} index={6}>
                 <TourComplete />
             </TabPanel>
-            <FooterNavigation activeTab={activeTab} tabs={tabs} handleActiveTab={setActiveTab} handleLogin={setOpenLogin} />
+            <FooterNavigation activeTab={activeTab} tabs={tabs} handleRegister={handleRegisterModal} />
             <Login open={openLogin} handleOpenModal={handleLoginModal} handleRegisterModal={handleRegisterModal} />
             <Register open={openRegister} handleOpenModal={handleRegisterModal} handleLoginModal={handleLoginModal} />
         </div>

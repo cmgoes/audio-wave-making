@@ -1,17 +1,17 @@
 const userModel = require("../model/user_model").users;
 const BSC = require("./basecontroller")
 
-async function validEmail(email) {
+async function existsEmail(email) {
     var femail = await BSC.BfindOne(userModel, {email})
     if (femail) {
-        return false;
+        return femail;
     } else {
-        return true;
+        return false;
     }
 }
 
 exports.register = async (req, res) => {
-    if (await validEmail(req.body.email)) {
+    if (!await existsEmail(req.body.email)) {
         var user = new userModel(req.body)
         user.password = user.generateHash(user.password)
         
@@ -31,6 +31,28 @@ exports.register = async (req, res) => {
         return res.json({
             status: false,
             data: BSC.TEXT_EMAIL_DUPLICATED
+        })
+    }
+}
+
+exports.login = async (req, res) => {
+    var user = await existsEmail(req.body.email);
+    if (user) {
+        if (user.validPassword(req.body.password, user.password)) {
+            return res.json({
+                status: true,
+                data: user
+            })
+        } else {
+            return res.json({
+                status: false,
+                data: BSC.TEXT_INVALID_PASSWORD
+            })
+        }
+    } else {
+        return res.json({
+            status: false,
+            data: BSC.TEXT_EMAIL_NOT_EXISTS
         })
     }
 }

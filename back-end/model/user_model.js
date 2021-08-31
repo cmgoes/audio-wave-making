@@ -17,6 +17,10 @@ const users = () => {
     UserSchema.methods.generateHash = function (password) {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
     }
+    
+    UserSchema.methods.validPassword = function (password, encrypted) {
+        return bcrypt.compareSync(password, encrypted);
+    }
 
     return mongoose.model("users", UserSchema);
 }

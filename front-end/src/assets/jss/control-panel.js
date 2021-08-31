@@ -21,9 +21,6 @@ const popoverStyles = {
     header: {
         height: "75px",
         padding: "20px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-start",
         backgroundColor: "#f9f9f9",
     },
 

@@ -284,3 +284,5 @@ exports.validTaskFileType = (file) => {
 exports.TEXT_SERVER_ERROR = "Something went wrong! Please try again later."
 exports.TEXT_FILE_NOT_FOUND_ERROR = "The file is not exist!"
 exports.TEXT_EMAIL_DUPLICATED = "This email already exists!"
+exports.TEXT_EMAIL_NOT_EXISTS = "This email doesn't exists!"
+exports.TEXT_INVALID_PASSWORD = "This password is invalid!"
