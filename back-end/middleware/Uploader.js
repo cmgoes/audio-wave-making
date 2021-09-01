@@ -9,7 +9,7 @@ class UploaderManager {
         cb(null, filePath);
       },
       filename: function(req, file, cb) {
-        cb(null, md5(file.originalname) +'.'+ file.originalname.split('.')[file.originalname.split('.').length - 1]);
+        cb(null, md5(String(new Date().valueOf())) +'.'+ file.originalname.split('.')[file.originalname.split('.').length - 1]);
       }
     });
   }

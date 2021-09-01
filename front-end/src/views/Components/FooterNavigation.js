@@ -4,13 +4,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/control-panel.js";
 import { Button, Grid } from "@material-ui/core";
 import { handleActiveTab } from "redux/actions/auth";
+import { Root } from "config";
 
 const useStyles = makeStyles(styles);
 
 export default function FooterNavigation({ activeTab, tabs, handleRegister }) {
     const classes = useStyles();
     const dispatch = useDispatch()
-    const userData = JSON.parse(localStorage.getItem("userData"))
+    const userData = JSON.parse(localStorage.getItem(Root.key))
 
     const goNext = () => {
         const index = tabs.indexOf(activeTab) + 1 >= tabs.length ? tabs.length - 1 : tabs.indexOf(activeTab) + 1

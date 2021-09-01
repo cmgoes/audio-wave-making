@@ -11,8 +11,9 @@ import styles from "assets/jss/control-panel.js";
 import { Avatar, Button, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Snackbar, Typography } from "@material-ui/core";
 import { GraphicEq, PlayArrow } from "@material-ui/icons";
 import MuiAlert from '@material-ui/lab/Alert';
-import { Axios } from '../../redux/services';
-import { audioList, selectedAudio } from '../../redux/actions/audio'
+import { Axios } from 'redux/services';
+import { audioList, selectedAudio } from 'redux/actions/audio'
+import AudioRecording from "./AudioRecording";
 
 const useStyles = makeStyles(styles);
 
@@ -28,6 +29,7 @@ export default function UploadAudio(props) {
         status: "success",
         text: ""
     })
+    const [openRecording, setOpenRecording] = useState(false)
 
     const audios = useSelector(state => state.audio.audioList)
     const currentAudio = useSelector(state => state.audio.selectedAudio)
@@ -51,10 +53,14 @@ export default function UploadAudio(props) {
     const loadAudioJson = async (e) => {
         const response = await Axios({ url: 'api/audio/getJson', data: { filename: e.json_name } })
         if (response.status) {
-            dispatch(selectedAudio({id: e._id, data: response.data}))
+            dispatch(selectedAudio({ id: e._id, data: response.data }))
         } else {
             setOpenAlert({ ...openAlert, open: true, status: "error", text: response.data })
         }
+    }
+
+    const makeRecords = () => {
+        setOpenRecording(!openRecording)
     }
 
     return (
@@ -64,7 +70,7 @@ export default function UploadAudio(props) {
             <Typography variant="caption" color="primary">Max file size: 40mb</Typography>
             <Grid spacing={2} container className={classes.pv10}>
                 <Grid item md={6}>
-                    <Button variant="contained" color="primary" className={classNames(classes.w100, classes.tCenter)} disableElevation>Make a recording</Button>
+                    <Button variant="contained" color="primary" className={classNames(classes.w100, classes.tCenter)} onClick={() => makeRecords()} disableElevation>Make a recording</Button>
                 </Grid>
                 <Grid item md={6}>
                     <Button variant="contained" color="primary" className={classNames(classes.w100, classes.tCenter)} disableElevation component="label">
@@ -77,7 +83,7 @@ export default function UploadAudio(props) {
                 <List>
                     {
                         audios.map((item, i) => (
-                            <ListItem key={i} button className={classes.audioListItem} onClick={() => loadAudioJson(item)} style={{border: currentAudio && currentAudio.id === item._id ? "1px solid #ffba39" : "none"}}>
+                            <ListItem key={i} button className={classes.audioListItem} onClick={() => loadAudioJson(item)} style={{ border: currentAudio && currentAudio.id === item._id ? "1px solid #ffba39" : "none" }}>
                                 <ListItemAvatar>
                                     <Avatar>
                                         <GraphicEq />
@@ -101,6 +107,11 @@ export default function UploadAudio(props) {
                     }
                 </List>
             </div>
+            {
+                openRecording ?
+                    <AudioRecording open={openRecording} handleOpenModal={makeRecords} />
+                    : null
+            }
             <Snackbar open={openAlert.open} autoHideDuration={5000} onClose={() => setOpenAlert({ ...openAlert, open: false })}>
                 <Alert onClose={() => setOpenAlert({ ...openAlert, open: false })} severity={openAlert.status}>
                     {openAlert.text}

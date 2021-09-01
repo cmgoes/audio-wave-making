@@ -6,13 +6,14 @@ import styles from "assets/jss/control-panel.js";
 import { Grid, IconButton, Typography } from "@material-ui/core";
 import { PowerSettingsNew } from "@material-ui/icons";
 import { handleLogout } from "redux/actions/auth";
+import { Root } from "config";
 
 const useStyles = makeStyles(styles);
 
 export default function Header({ activeTab, handleActiveTab, tabs, handleRegister }) {
     const classes = useStyles();
     const dispatch = useDispatch()
-    const userData = JSON.parse(localStorage.getItem("userData"))
+    const userData = JSON.parse(localStorage.getItem(Root.key))
 
     const logout = () => {
         dispatch(handleLogout)

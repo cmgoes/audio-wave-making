@@ -63,6 +63,16 @@ const popoverStyles = {
     loginModal: {
         width: "350px"
     },
+    micAllow: {
+        padding: "15px",
+        borderRadius: "50%",
+        backgroundColor: "#ebebeb",
+        width: "135px",
+        height: "135px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
 
 
     ////////////////
@@ -77,6 +87,12 @@ const popoverStyles = {
     },
     ph10: {
         padding: "0 10px"
+    },
+    ph20: {
+        padding: "0 20px"
+    },
+    ph30: {
+        padding: "0 30px"
     },
     pt10: {
         paddingTop: "10px"
@@ -116,6 +132,9 @@ const popoverStyles = {
     },
     bgWhite: {
         backgroundColor: "white"
+    },
+    dHidden: {
+        display: "none"
     },
     dFlex: {
         display: "flex"

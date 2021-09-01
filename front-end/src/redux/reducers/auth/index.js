@@ -1,5 +1,7 @@
+import { Root } from "config"
+
 // **  Initial State
-const userData = JSON.parse(localStorage.getItem("userData"))
+const userData = JSON.parse(localStorage.getItem(Root.key))
 const initialState = {
   userData: {},
   activeTab: userData ? 0 : 7

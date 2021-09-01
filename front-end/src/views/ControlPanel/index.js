@@ -10,7 +10,7 @@ import styles from "assets/jss/control-panel.js";
 
 import { Box, Grid, Tab, Tabs, Typography } from "@material-ui/core";
 import { ColorLens, MusicNote, Tune, FontDownload, Print, AspectRatio, CheckCircle } from "@material-ui/icons";
-import UploadAudio from './UploadAudio';
+import UploadAudio from 'views/ControlPanel/Audios';
 import SetColor from './SetColor';
 import SetStyle from './SetStyle';
 import TourComplete from './TourComplete';
@@ -20,6 +20,7 @@ import Register from "views/Auth/Register";
 import Header from "views/Components/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { handleActiveTab } from "redux/actions/auth";
+import { Root } from "config";
 
 const useStyles = makeStyles(styles);
 
@@ -58,7 +59,7 @@ function a11yProps(index) {
 export default function ControlPanel(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const userData = JSON.parse(localStorage.getItem("userData"))
+    const userData = JSON.parse(localStorage.getItem(Root.key))
     const activeTab = useSelector(state => state.auth.activeTab);
     const [openLogin, setOpenLogin] = useState(false);
     const [openRegister, setOpenRegister] = useState(false)
