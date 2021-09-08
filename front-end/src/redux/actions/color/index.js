@@ -9,3 +9,9 @@ export const selectedColor = (data) => {
         dispatch({ type: 'SELECTEDCOLOR', data })
     }
 }
+
+export const selectedBackground = (data) => {
+    return dispatch => {
+        dispatch({ type: 'SELECTEDBACKGROUND', data })
+    }
+}

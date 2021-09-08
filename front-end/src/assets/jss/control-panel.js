@@ -49,6 +49,10 @@ const popoverStyles = {
         height: "100%",
         padding: "10px"
     },
+    setText: {
+        height: "100%",
+        padding: "10px"
+    },
     graphTypes: {
         flexDirection: "row"
     },

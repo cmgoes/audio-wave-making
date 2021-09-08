@@ -3,6 +3,7 @@ import * as d3 from 'd3'
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/graph-content.js";
 import { useSelector } from "react-redux";
+import Gradient from "javascript-color-gradient";
 
 const useStyles = makeStyles(styles);
 export default function GraphContent(props) {
@@ -16,6 +17,7 @@ export default function GraphContent(props) {
 	const circle_radius = useSelector(state => state.style.circle_radius)
 	const circle_rotate = useSelector(state => state.style.circle_rotate)
 	const bar_shape = useSelector(state => state.style.bar_shape)
+	const backgroundColor = useSelector(state => state.color.selectedBackground)
 
 	useEffect(() => {
 		if (!audio_data) return;
@@ -41,14 +43,14 @@ export default function GraphContent(props) {
 			var n = Number((frequency_data.length / numth).toFixed());
 			var n2 = n
 			var c = 0;
-			while (c < frequency_data.length){
+			while (c < frequency_data.length) {
 				var sl = frequency_data.slice(c, n)
 				var average = (sl.reduce((a, b) => a + b, 0) / sl.length).toFixed()
 				cus_frequencies.push(average)
 				c = n
 				n = n + n2
 			}
-			
+
 			// for (let i = 0; i < frequency_data.length; i++) {
 			// 	if (i % n === 0) {
 			// 		cus_frequencies.push(frequency_data[i])
@@ -76,15 +78,46 @@ export default function GraphContent(props) {
 			.append('svg')
 			.attr('xmlns', 'http://www.w3.org/2000/svg')
 			.attr('viewBox', `0 0 ${canvasWidth} ${canvasHeight}`)
-			.attr('style', `background-color: ${"white"}`)
+			.attr('style', `background-color: ${backgroundColor}`)
 
 		// const barWidth = svgCanvas.node().scrollWidth / cus_frequencies.length
 		var m = contentHeight / Math.max(...cus_frequencies);
 		m = m < 1 ? 1 : m
 
-		var divide_frequency = Math.max(...cus_frequencies) / selectedColors.color.length;
+		// making gradient color
+		const colorGradient = new Gradient();
+		var gardientedColors = [];
+
+		switch (selectedColors.color.length) {
+			case 2:
+				colorGradient.setGradient(selectedColors.color[0].color, selectedColors.color[1].color);
+				colorGradient.setMidpoint(3);
+				break;
+			case 3:
+				colorGradient.setGradient(selectedColors.color[0].color, selectedColors.color[1].color, selectedColors.color[2].color);
+				colorGradient.setMidpoint(5);
+				break;
+			case 4:
+				colorGradient.setGradient(selectedColors.color[0].color, selectedColors.color[1].color, selectedColors.color[2].color, selectedColors.color[3].color);
+				colorGradient.setMidpoint(7);
+				break;
+			case 5:
+				colorGradient.setGradient(selectedColors.color[0].color, selectedColors.color[1].color, selectedColors.color[2].color, selectedColors.color[3].color, selectedColors.color[4].color);
+				colorGradient.setMidpoint(9);
+				break;
+			default:
+				break;
+		}
+
+		if (colorGradient.getArray().length > 0) {
+			gardientedColors = colorGradient.getArray();
+		} else {
+			gardientedColors = [selectedColors.color[0].color];
+		}
+
+		var divide_frequency = Math.max(...cus_frequencies) / gardientedColors.length;
 		var divide_frequencies = [];
-		for (let i = 0; i < selectedColors.color.length; i++) {
+		for (let i = 0; i < gardientedColors.length; i++) {
 			divide_frequencies.push(divide_frequency * (i + 1))
 		}
 		if (graphType === "bar") {
@@ -95,11 +128,11 @@ export default function GraphContent(props) {
 				.attr('height', (datapoint) => datapoint * m * 2)
 				.attr('fill', (datapoint) => {
 					if (datapoint <= divide_frequencies[0]) {
-						return selectedColors.color[0].color
+						return gardientedColors[0]
 					}
 					for (let i = 0; i < divide_frequencies.length - 1; i++) {
 						if (divide_frequencies[i] < datapoint && datapoint <= divide_frequencies[i + 1]) {
-							return selectedColors.color[i + 1].color
+							return gardientedColors[i + 1]
 						}
 					}
 				})
@@ -126,11 +159,11 @@ export default function GraphContent(props) {
 				.join("path")
 				.attr('fill', (d) => {
 					if (d <= divide_frequencies[0]) {
-						return selectedColors.color[0].color
+						return gardientedColors[0]
 					}
 					for (let i = 0; i < divide_frequencies.length - 1; i++) {
 						if (divide_frequencies[i] < d && d <= divide_frequencies[i + 1]) {
-							return selectedColors.color[i + 1].color
+							return gardientedColors[i + 1]
 						}
 					}
 				})
@@ -142,7 +175,7 @@ export default function GraphContent(props) {
 					// .padAngle(bar_space)
 				)
 		}
-	}, [audio_data, selectedColors, graphType, bar_width, bar_space, circle_radius, circle_rotate, bar_shape])
+	}, [audio_data, selectedColors, graphType, bar_width, bar_space, circle_radius, circle_rotate, bar_shape, backgroundColor])
 
 	return (
 		<div className={classes.graphContent}>

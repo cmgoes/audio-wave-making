@@ -13,6 +13,7 @@ import { ColorLens, MusicNote, Tune, FontDownload, Print, AspectRatio, CheckCirc
 import UploadAudio from 'views/ControlPanel/Audios';
 import SetColor from './SetColor';
 import SetStyle from './SetStyle';
+import SetText from "./SetText";
 import TourComplete from './TourComplete';
 import FooterNavigation from 'views/Components/FooterNavigation';
 import Login from "views/Auth/Login";
@@ -128,7 +129,7 @@ export default function ControlPanel(props) {
                 <SetStyle />
             </TabPanel>
             <TabPanel className={classes.tabPanel} value={activeTab} index={3}>
-                Set Text
+                <SetText />
             </TabPanel>
             <TabPanel className={classes.tabPanel} value={activeTab} index={4}>
                 Print

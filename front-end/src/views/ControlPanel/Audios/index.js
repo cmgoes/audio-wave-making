@@ -9,11 +9,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/control-panel.js";
 import { Avatar, Button, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Snackbar, Typography } from "@material-ui/core";
-import { GraphicEq, PlayArrow } from "@material-ui/icons";
+import { GraphicEq, PlayArrow, Stop } from "@material-ui/icons";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Axios } from 'redux/services';
 import { audioList, selectedAudio } from 'redux/actions/audio'
 import AudioRecording from "./AudioRecording";
+import { Root } from "config";
 
 const useStyles = makeStyles(styles);
 
@@ -30,6 +31,8 @@ export default function UploadAudio(props) {
         text: ""
     })
     const [openRecording, setOpenRecording] = useState(false)
+    const [playAudio, setPlayAudio] = useState(null);
+    const [playAudioId, setPlayAudioId] = useState("");
 
     const audios = useSelector(state => state.audio.audioList)
     const currentAudio = useSelector(state => state.audio.selectedAudio)
@@ -39,7 +42,7 @@ export default function UploadAudio(props) {
             setOpenAlert({ ...openAlert, open: true, status: "error", text: "You should upload an audio file." })
             return
         }
-
+        console.log(`e.target.files[0]`, e.target.files[0])
         const formData = new FormData();
         formData.append("audio", e.target.files[0])
 
@@ -62,6 +65,31 @@ export default function UploadAudio(props) {
     const makeRecords = () => {
         setOpenRecording(!openRecording)
     }
+
+    const playMusic = (id) => {
+        stopMusic();
+        const audio_name = audios.find(e => e._id == id).audio_name
+        setPlayAudio(new Audio(`${Root.baseurl}music/${audio_name}`));
+        setPlayAudioId(id)
+    }
+
+    const stopMusic = () => {
+        if (playAudio) {
+            playAudio.pause();
+            setPlayAudio(null);
+            setPlayAudioId("");
+        }
+    }
+
+    useEffect(() => {
+        if (playAudio) {
+            playAudio.play();
+            playAudio.addEventListener("ended", function(){
+                setPlayAudio(null);
+                setPlayAudioId("");
+           });
+        }
+    }, [playAudio])
 
     return (
         <div className={classNames(classes.uploadAudio, classes.p10)}>
@@ -98,9 +126,16 @@ export default function UploadAudio(props) {
                                     </Grid>
                                 </Grid>
                                 <ListItemSecondaryAction>
-                                    <IconButton edge="end" aria-label="play music">
-                                        <PlayArrow />
-                                    </IconButton>
+                                {
+                                    playAudioId === item._id ?
+                                        <IconButton edge="end" aria-label="stop music" onClick={() => stopMusic()}>
+                                            <Stop />
+                                        </IconButton>
+                                    :
+                                        <IconButton edge="end" aria-label="play music" onClick={() => playMusic(item._id)}>
+                                            <PlayArrow />
+                                        </IconButton>
+                                }
                                 </ListItemSecondaryAction>
                             </ListItem>
                         ))

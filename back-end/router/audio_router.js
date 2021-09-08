@@ -9,6 +9,7 @@ const { MUSICURL } = require('../db')
 var Uploader = new UploaderManager(path.join(MUSICURL))
 
 router.post("/uploadAudio", multer({ storage: Uploader.storage, fileFilter: Uploader.filter }).any(), audioController.uploadAudio);
+router.post("/uploadRecording", multer().any(), audioController.uploadRecording);
 router.post("/getAudios", audioController.getAudios);
 router.post("/getJson", audioController.getJson);
 

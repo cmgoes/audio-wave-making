@@ -1,7 +1,8 @@
 // **  Initial State
 const initialState = {
     colorList: [],
-    selectedColor: {}
+    selectedColor: {},
+    selectedBackground: "#FFFFFF"
 }
 
 const color = (state = initialState, action) => {
@@ -10,6 +11,8 @@ const color = (state = initialState, action) => {
             return { ...state, colorList: action.data }
         case 'SELECTEDCOLOR':
             return { ...state, selectedColor: action.data }
+        case 'SELECTEDBACKGROUND':
+            return { ...state, selectedBackground: action.data }
         default:
             return state
     }
