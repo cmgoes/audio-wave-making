@@ -77,6 +77,13 @@ const popoverStyles = {
         justifyContent: "center",
         alignItems: "center"
     },
+    alignIcons: {
+        padding: "5px",
+        fontSize: "35px"
+    },
+    activeAlignIcon: {
+        color: "red"
+    },
 
 
     ////////////////

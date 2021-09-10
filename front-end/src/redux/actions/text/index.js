@@ -21,3 +21,15 @@ export const setFontSize = (data) => {
         dispatch({ type: 'SETFONTSIZE', data })
     }
 }
+
+export const setJustification = (data) => {
+    return dispatch => {
+        dispatch({ type: 'TEXTJUSTIFICATION', data })
+    }
+}
+
+export const setVerticalAlign = (data) => {
+    return dispatch => {
+        dispatch({ type: 'TEXTVERTICALALIGN', data })
+    }
+}

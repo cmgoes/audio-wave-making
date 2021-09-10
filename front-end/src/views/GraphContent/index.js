@@ -18,6 +18,12 @@ export default function GraphContent(props) {
 	const circle_rotate = useSelector(state => state.style.circle_rotate)
 	const bar_shape = useSelector(state => state.style.bar_shape)
 	const backgroundColor = useSelector(state => state.color.selectedBackground)
+	const displayText = useSelector(state => state.text.displayText)
+	const textFont = useSelector(state => state.text.textFont)
+	const textColor = useSelector(state => state.text.textColor)
+	const fontSize = useSelector(state => state.text.fontSize)
+	const textJustification = useSelector(state => state.text.textJustification)
+	const textVerticalAlign = useSelector(state => state.text.textVerticalAlign)
 
 	useEffect(() => {
 		if (!audio_data) return;
@@ -31,6 +37,7 @@ export default function GraphContent(props) {
 		const barRadius = bar_shape
 		const innerRadius = circle_radius
 		const outerRadius = Math.min(canvasWidth, canvasHeight) / 2;
+		const textSize = fontSize * 4.2
 
 		//---------------------------- data modify ----------------------------
 		var cus_frequencies = [];
@@ -50,23 +57,10 @@ export default function GraphContent(props) {
 				c = n
 				n = n + n2
 			}
-
-			// for (let i = 0; i < frequency_data.length; i++) {
-			// 	if (i % n === 0) {
-			// 		cus_frequencies.push(frequency_data[i])
-			// 	}
-			// }
-			// if (cus_frequencies.length !== frequency_data.length) {
-			// 	cus_frequencies.push(frequency_data[0])
-			// 	cus_frequencies.push(frequency_data[frequency_data.length - 1])
-			// }
 		} else {
 			cus_frequencies = frequency_data
 		}
 
-		// for (let i = 0; i < cus_frequencies.length; i++) {
-		// 	if (cus_frequencies[i] == 0) cus_frequencies[i] = 0.25
-		// }
 		//---------------------------- data modify ----------------------------
 
 		const graph_content = document.getElementById("graph_content")
@@ -175,7 +169,71 @@ export default function GraphContent(props) {
 					// .padAngle(bar_space)
 				)
 		}
-	}, [audio_data, selectedColors, graphType, bar_width, bar_space, circle_radius, circle_rotate, bar_shape, backgroundColor])
+
+		// adding text
+		if (displayText.length > 0) {
+			svgCanvas.append("g")
+				.append("text")
+				.text(displayText)
+				.attr("font-family", textFont)
+				.attr("font-size", textSize)
+				.attr("fill", textColor)
+				.attr("id", "audio_text")
+				.attr("text-anchor", "middle")
+
+
+			const audioText = document.querySelector("#audio_text");
+			const audioTextWidth = audioText.getBoundingClientRect().width
+			// getting position of text
+			var x_text = 0;
+			var y_text = 0;
+			switch (textJustification) {
+				case 0:
+					x_text = audioTextWidth * 4.2 + 200
+					break;
+				case 1:
+					x_text = canvasWidth / 2
+					break;
+				case 2:
+					x_text = canvasWidth - audioTextWidth * 4.2 - 200
+					break;
+				default:
+					break;
+			}
+			switch (textVerticalAlign) {
+				case 0:
+					y_text = textSize / 2 + 200;
+					break;
+				case 1:
+					y_text = canvasHeight / 2 + textSize / 4.2
+					break;
+				case 2:
+					y_text = canvasHeight - 200
+					break;
+				default:
+					break;
+			}
+
+			audioText.setAttribute("x", x_text)
+			audioText.setAttribute("y", y_text)
+		}
+	}, [
+		audio_data,
+		selectedColors,
+		graphType,
+		bar_width,
+		bar_space,
+		circle_radius,
+		circle_rotate,
+		bar_shape,
+		backgroundColor,
+		displayText,
+		textFont,
+		textColor,
+		fontSize,
+		textJustification,
+		textVerticalAlign
+	])
 
 	return (
 		<div className={classes.graphContent}>

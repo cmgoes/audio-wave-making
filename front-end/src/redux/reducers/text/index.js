@@ -1,9 +1,11 @@
 // **  Initial State
 const initialState = {
     displayText: "",
-    textFont: "cardo",
+    textFont: "Alfa Slab One",
     textColor: "#000000",
-    fontSize: 72
+    fontSize: 72,
+    textJustification: 1,
+    textVerticalAlign: 1
 }
 
 const text = (state = initialState, action) => {
@@ -16,6 +18,10 @@ const text = (state = initialState, action) => {
             return { ...state, textColor: action.data }
         case 'SETFONTSIZE':
             return { ...state, fontSize: action.data }
+        case 'TEXTJUSTIFICATION':
+            return { ...state, textJustification: action.data }
+        case 'TEXTVERTICALALIGN':
+            return { ...state, textVerticalAlign: action.data }
         default:
             return state
     }
