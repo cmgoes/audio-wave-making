@@ -53,8 +53,8 @@ export default function SetText(props) {
                                     className={classNames(classes.w100)}
                                 >
                                     {
-                                        Root.fonts.map((item) => (
-                                            <MenuItem value={item.name} key={item.id} >{item.name}</MenuItem>
+                                        Root.fonts.map((item, i) => (
+                                            <MenuItem value={item.name} key={i} >{item.name}</MenuItem>
                                         ))
                                     }
                                 </Select>

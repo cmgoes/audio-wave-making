@@ -17,7 +17,7 @@ const users = () => {
     UserSchema.methods.generateHash = function (password) {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
     }
-    
+
     UserSchema.methods.validPassword = function (password, encrypted) {
         return bcrypt.compareSync(password, encrypted);
     }
@@ -25,6 +25,17 @@ const users = () => {
     return mongoose.model("users", UserSchema);
 }
 
+const session = () => {
+    const SessionSchema = new Schema({
+        user_id: { type: String, required: true },
+        session_token: { type: String, required: true },
+        expire_time: { type: Number, required: true }
+    })
+
+    return mongoose.model("sessions", SessionSchema)
+}
+
 module.exports = {
-    users: users()
+    users: users(),
+    session: session()
 }

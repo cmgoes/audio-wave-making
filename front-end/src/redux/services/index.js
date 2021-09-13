@@ -1,13 +1,17 @@
 // ** fetch
-import { Root } from '../../config/index';
+import { Root } from 'config';
 import axios from 'axios';
 
+const sessionToken = JSON.parse(localStorage.getItem(Root.sessionKey))
+
 export const Axios = async ({ url, data = {}, method = 'POST', headers = {} }) => {
+    console.log(`sessionToken`, sessionToken)
     const response = await axios({
         url: `${Root.baseurl}${url}`,
         headers: {
             ...headers,
-            'X-Requested-With': 'XMLHttpRequest'
+            'X-Requested-With': 'XMLHttpRequest',
+            'access-token': sessionToken
         },
         method,
         data

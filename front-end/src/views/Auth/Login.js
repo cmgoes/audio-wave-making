@@ -37,16 +37,13 @@ export default function Login({ open, handleOpenModal, handleRegisterModal }) {
             data: state
         })
         if (response.status) {
-            dispatch(handleLogin(response.data))
+            dispatch(handleLogin(response.data.userData, response.data.session_token))
             dispatch(handleActiveTab(0))
             handleOpenModal()
         } else {
             setOpenAlert({ ...openAlert, open: true, status: "error", text: response.data })
         }
     }
-
-    useEffect(() => {
-    }, [])
 
     return (
         <React.Fragment>

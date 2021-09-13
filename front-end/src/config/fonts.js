@@ -116,10 +116,6 @@ export const fonts = [
         name: "Press Start 2P"
     },
     {
-        id: "Press_Start_2P",
-        name: "Press Start 2P"
-    },
-    {
         id: "Roboto",
         name: "Roboto"
     },

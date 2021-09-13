@@ -7,5 +7,6 @@ module.exports = {
     "ADMINPASSMETHOD" : "admin",
     "PRODB": "mongodb://localhost:27017/soundviz",
     "TESTDB": "mongodb://localhost:27017/soundviz",
-    "ServerPort": 2021
+    "ServerPort": 2021,
+    "EXPIRE_TIME": 172800000000
 }

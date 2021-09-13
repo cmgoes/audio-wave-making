@@ -6,6 +6,7 @@ const auth = {
     // unauthorized route
     isLoggedIn: async (req, res, next)=> {
         try{
+            
             next()
         } catch(e) {
             return res.json({session : true});

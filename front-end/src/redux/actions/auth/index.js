@@ -1,16 +1,18 @@
 import { Root } from "config"
 
 // ** Handle User Login
-export const handleLogin = data => {
-  localStorage.setItem(Root.key, JSON.stringify(data))
+export const handleLogin = (userData, sessionToken) => {
+  localStorage.setItem(Root.key, JSON.stringify(userData))
+  localStorage.setItem(Root.sessionKey, JSON.stringify(sessionToken))
   return dispatch => {
-    dispatch({ type: 'LOGIN', data })
+    dispatch({ type: 'LOGIN', userData })
   }
 }
 
 // ** Handle User Logout
 export const handleLogout = () => {
   localStorage.removeItem(Root.key)
+  localStorage.removeItem(Root.sessionKey)
   return dispatch => {
     dispatch({ type: 'LOGOUT' })
   }

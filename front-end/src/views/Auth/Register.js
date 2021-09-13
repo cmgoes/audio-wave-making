@@ -40,7 +40,7 @@ export default function Register({ open, handleOpenModal, handleLoginModal }) {
             data: state
         })
         if (response.status) {
-            dispatch(handleLogin(response.data))
+            dispatch(handleLogin(response.data.userData, response.data.session_token))
             dispatch(handleActiveTab(0))
             handleOpenModal()
         } else {
