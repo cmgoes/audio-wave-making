@@ -34,6 +34,8 @@ export default function UploadAudio(props) {
     const [playAudio, setPlayAudio] = useState(null);
     const [playAudioId, setPlayAudioId] = useState("");
 
+    const userData = JSON.parse(localStorage.getItem(Root.key))
+
     const audios = useSelector(state => state.audio.audioList)
     const currentAudio = useSelector(state => state.audio.selectedAudio)
 
@@ -42,9 +44,10 @@ export default function UploadAudio(props) {
             setOpenAlert({ ...openAlert, open: true, status: "error", text: "You should upload an audio file." })
             return
         }
-        console.log(`e.target.files[0]`, e.target.files[0])
+
         const formData = new FormData();
         formData.append("audio", e.target.files[0])
+        formData.append("user_id", userData._id)
 
         const response = await Axios({ url: 'api/audio/uploadAudio', data: formData })
         if (response.status) {

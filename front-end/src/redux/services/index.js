@@ -1,11 +1,13 @@
 // ** fetch
 import { Root } from 'config';
 import axios from 'axios';
+import { store } from '../storeConfig/store'
+import { handleLogout } from '../actions/auth';
+
 
 const sessionToken = JSON.parse(localStorage.getItem(Root.sessionKey))
 
 export const Axios = async ({ url, data = {}, method = 'POST', headers = {} }) => {
-    console.log(`sessionToken`, sessionToken)
     const response = await axios({
         url: `${Root.baseurl}${url}`,
         headers: {
@@ -16,6 +18,9 @@ export const Axios = async ({ url, data = {}, method = 'POST', headers = {} }) =
         method,
         data
     })
+    if (response.data.session) {
+        store.dispatch(handleLogout())
+    }
     return response.data
 }
 

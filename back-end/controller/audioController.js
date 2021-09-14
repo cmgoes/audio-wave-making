@@ -9,6 +9,7 @@ const fs = require('fs');
 const { MUSICURL, JSONURL } = require('../db')
 
 exports.uploadAudio = (req, res, next) => {
+    const { user_id } = req.body;
     const { filename, originalname } = req.files[0];
     const json_file_name = md5(originalname) + '.json';
 
@@ -18,7 +19,7 @@ exports.uploadAudio = (req, res, next) => {
             return next();
         }
 
-        var sdata = await BSC.data_save({ user_id: String(Date.now()), audio_name: filename, json_name: json_file_name, origin_name: originalname }, AudioModel)
+        var sdata = await BSC.data_save({ user_id: user_id, audio_name: filename, json_name: json_file_name, origin_name: originalname, style: {}, text: {} }, AudioModel)
         if (sdata) {
             this.getAudios(req, res, next);
         } else {
@@ -92,4 +93,8 @@ exports.getJson = async (req, res, next) => {
             })
         }
     });
+}
+
+exports.getDefaultAudio = async (req, res) => {
+
 }

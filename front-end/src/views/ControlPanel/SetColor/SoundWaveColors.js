@@ -9,6 +9,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { Axios } from 'redux/services';
 import MakeColorModal from './MakeColorModal'
 import { selectedColor, colorList } from "redux/actions/color";
+import { Root } from "config";
 
 const useStyles = makeStyles(styles);
 
@@ -23,11 +24,13 @@ export default function SoundWaveColors(props) {
     const colorsList = useSelector(state => state.color.colorList)
     const selectedColors = useSelector(state => state.color.selectedColor)
     const backgroundColor = useSelector(state => state.color.selectedBackground)
+    const userData = JSON.parse(localStorage.getItem(Root.key))
 
     const [open, handleOpenModal] = useState(false);
     const [newColorName, setNewColorName] = useState("")
     const [nameCreated, setNameCreated] = useState(false);
     const [colors, setColors] = useState([])
+    const [isPublish, setIsPublish] = useState(false);
     const [openAlert, setOpenAlert] = useState({
         open: false,
         status: "success",
@@ -38,7 +41,6 @@ export default function SoundWaveColors(props) {
         dispatch(selectedColor(e))
     }
 
-    
     const handleCloseModal = () => {
         setNewColorName("")
         setNameCreated(false)
@@ -49,8 +51,10 @@ export default function SoundWaveColors(props) {
     const handleCreateColor = async () => {
         const response = await Axios({
             url: "api/style/addColor", data: {
+                user_id: userData._id,
                 name: newColorName,
-                color: colors
+                color: colors,
+                publish: isPublish
             }
         })
         if (response.status) {
@@ -107,6 +111,8 @@ export default function SoundWaveColors(props) {
                 colors={colors}
                 setColors={setColors}
                 handleCreateColor={handleCreateColor}
+                isPublish={isPublish}
+                setIsPublish={setIsPublish}
             />
             <Snackbar open={openAlert.open} autoHideDuration={5000} onClose={() => setOpenAlert({ ...openAlert, open: false })}>
                 <Alert onClose={() => setOpenAlert({ ...openAlert, open: false })} severity={openAlert.status}>

@@ -7,7 +7,7 @@ import classNames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/control-panel.js";
-import { Avatar, Backdrop, Button, Fade, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Modal, Snackbar, TextField, Typography } from "@material-ui/core";
+import { Avatar, Backdrop, Button, Checkbox, Fade, FormControlLabel, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Modal, Snackbar, TextField, Typography } from "@material-ui/core";
 import { Add, Close, PlayArrow } from "@material-ui/icons";
 import MuiAlert from '@material-ui/lab/Alert';
 import { ColorPicker } from 'material-ui-color';
@@ -27,6 +27,8 @@ export default function SetColor({
     setNameCreated,
     colors,
     setColors,
+    isPublish,
+    setIsPublish,
     handleCreateColor
 }) {
     const classes = useStyles();
@@ -110,6 +112,12 @@ export default function SetColor({
                                     }
                                 </Grid>
                                 <Typography variant="caption" className={classNames(classes.tCenter, classes.w100, classes.dBlock, classes.mv10)} color="primary">{colors.length > 0 ? `Hover over a color and click the X to remove it.` : `Click the plus button to add a color.`}</Typography>
+                                <Grid container justify="center">
+                                    <FormControlLabel
+                                        control={<Checkbox checked={isPublish} onChange={e => setIsPublish(e.target.checked)} name="publish" color="primary" />}
+                                        label="Publish"
+                                    />
+                                </Grid>
                                 {
                                     colors.length > 0 ?
                                         <Grid className={classNames(classes.dFlex, classes.jCenter)}>

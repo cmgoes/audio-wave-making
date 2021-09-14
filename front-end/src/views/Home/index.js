@@ -1,14 +1,6 @@
 import React, { useEffect } from "react";
-// // nodejs library that concatenates classes
-// import classNames from "classnames";
-// // react components for routing our app without refresh
-// import { Link } from "react-router-dom";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-// @material-ui/icons
-// core components
 import Header from "components/Header/Header.js";
-// sections for this page
 import HeaderLinks from "components/Header/HeaderLinks.js";
 import { Grid } from "@material-ui/core";
 
@@ -19,6 +11,7 @@ import { colorList, selectedColor } from "redux/actions/color";
 import { useDispatch, useSelector } from "react-redux";
 import { Axios } from "redux/services";
 import { audioList, selectedAudio } from "redux/actions/audio";
+import { Root } from "config";
 
 const useStyles = makeStyles(styles);
 
@@ -26,17 +19,29 @@ export default function Components(props) {
   const classes = useStyles();
   const dispatch = useDispatch()
   const { ...rest } = props;
+  
+  const userData = JSON.parse(localStorage.getItem(Root.key))
+
   const colorsList = useSelector(state => state.color.colorList)
   const audios = useSelector(state => state.audio.audioList)
 
   useEffect(() => {
-    loadColors()
-    loadAudios()
-  }, [])
+    userData ? loadData() : loadGuestData()
+  }, [userData])
 
   useEffect(() => {
     dispatch(selectedColor(colorsList[0]))
   }, [colorsList])
+
+  const loadData = () => {
+    loadColors()
+    loadAudios()
+  }
+
+  const loadGuestData = () => {
+    loadPublicColor()
+    loadDefaultAudio()
+  }
 
   const loadColors = async () => {
     const response = await Axios({
@@ -47,8 +52,24 @@ export default function Components(props) {
     }
   }
 
+  const loadPublicColor = async () => {
+    const response = await Axios({
+      url: "api/style/getPublicColors"
+    })
+    if (response.status) {
+      dispatch(colorList(response.data))
+    }
+  }
+
   const loadAudios = async () => {
     const response = await Axios({ url: 'api/audio/getAudios' })
+    if (response.status) {
+      dispatch(audioList(response.data))
+    }
+  }
+
+  const loadDefaultAudio = async () => {
+    const response = await Axios({ url: 'api/audio/getDefaultAudio' })
     if (response.status) {
       dispatch(audioList(response.data))
     }

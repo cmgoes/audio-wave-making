@@ -15,6 +15,7 @@ export const handleLogout = () => {
   localStorage.removeItem(Root.sessionKey)
   return dispatch => {
     dispatch({ type: 'LOGOUT' })
+    location.reload();
   }
 }
 
