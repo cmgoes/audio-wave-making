@@ -13,8 +13,9 @@ exports.addColor = async (req, res) => {
     }
 }
 
-exports.getColors = async (req, res) => {
-    var data = await BSC.Bfind(colorModel, {})
+exports.getColorsByUserId = async (req, res) => {
+    const { user_id } = req.body;
+    var data = await BSC.Bfind(colorModel, { $or: [{ user_id }, { publish: true }] })
     if (data) {
         return res.json({
             status: true,
@@ -29,7 +30,7 @@ exports.getColors = async (req, res) => {
 }
 
 exports.getPublicColors = async (req, res) => {
-    var data = await BSC.Bfind(colorModel, { public: true })
+    var data = await BSC.Bfind(colorModel, { publish: true })
     if (data) {
         return res.json({
             status: true,

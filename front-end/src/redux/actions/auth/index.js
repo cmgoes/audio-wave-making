@@ -6,6 +6,7 @@ export const handleLogin = (userData, sessionToken) => {
   localStorage.setItem(Root.sessionKey, JSON.stringify(sessionToken))
   return dispatch => {
     dispatch({ type: 'LOGIN', userData })
+    location.reload();
   }
 }
 

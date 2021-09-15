@@ -19,19 +19,14 @@ export default function Components(props) {
   const classes = useStyles();
   const dispatch = useDispatch()
   const { ...rest } = props;
-  
+
   const userData = JSON.parse(localStorage.getItem(Root.key))
 
-  const colorsList = useSelector(state => state.color.colorList)
   const audios = useSelector(state => state.audio.audioList)
 
   useEffect(() => {
     userData ? loadData() : loadGuestData()
-  }, [userData])
-
-  useEffect(() => {
-    dispatch(selectedColor(colorsList[0]))
-  }, [colorsList])
+  }, [])
 
   const loadData = () => {
     loadColors()
@@ -45,7 +40,9 @@ export default function Components(props) {
 
   const loadColors = async () => {
     const response = await Axios({
-      url: "api/style/getColors"
+      url: "api/style/getColorsByUserId", data: {
+        user_id: userData._id
+      }
     })
     if (response.status) {
       dispatch(colorList(response.data))
@@ -62,7 +59,11 @@ export default function Components(props) {
   }
 
   const loadAudios = async () => {
-    const response = await Axios({ url: 'api/audio/getAudios' })
+    const response = await Axios({
+      url: 'api/audio/getAudiosByUserId', data: {
+        user_id: userData._id
+      }
+    })
     if (response.status) {
       dispatch(audioList(response.data))
     }

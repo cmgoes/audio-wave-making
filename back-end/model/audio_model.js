@@ -7,6 +7,7 @@ const audios = () => {
         origin_name: { type: String, required: true },
         audio_name: { type: String, required: true },
         json_name: { type: String, required: true },
+        color: { type: Object, required: true },
         style: { type: Object, required: true },
         text: { type: Object, required: true },
         date: { type: Date, default: Date.now() }

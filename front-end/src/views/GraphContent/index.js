@@ -10,20 +10,9 @@ export default function GraphContent(props) {
 	const classes = useStyles();
 
 	const audio_data = useSelector(state => state.audio.selectedAudio)
-	const selectedColors = useSelector(state => state.color.selectedColor)
-	const graphType = useSelector(state => state.style.graph_type)
-	const bar_width = useSelector(state => state.style.bar_width)
-	const bar_space = useSelector(state => state.style.bar_space)
-	const circle_radius = useSelector(state => state.style.circle_radius)
-	const circle_rotate = useSelector(state => state.style.circle_rotate)
-	const bar_shape = useSelector(state => state.style.bar_shape)
-	const backgroundColor = useSelector(state => state.color.selectedBackground)
-	const displayText = useSelector(state => state.text.displayText)
-	const textFont = useSelector(state => state.text.textFont)
-	const textColor = useSelector(state => state.text.textColor)
-	const fontSize = useSelector(state => state.text.fontSize)
-	const textJustification = useSelector(state => state.text.textJustification)
-	const textVerticalAlign = useSelector(state => state.text.textVerticalAlign)
+	const { graph_type, bar_width, bar_space, circle_radius, circle_rotate, bar_shape } = useSelector(state => state.style)
+	const { backgroundColor, graphColor } = useSelector(state => state.color)
+	const { displayText, textFont, textColor, fontSize, textJustification, textVerticalAlign } = useSelector(state => state.text)
 
 	useEffect(() => {
 		if (!audio_data) return;
@@ -33,7 +22,7 @@ export default function GraphContent(props) {
 		const paddingVirtical = 300
 		const paddingHorizontal = 1000
 		const contentHeight = canvasHeight / 2 - paddingVirtical // as max, half of canvas height: ;
-		const numth = (canvasWidth - paddingHorizontal) / (graphType === "bar" ? (bar_width + bar_space) : bar_width) //graphType === "bar" ? bar_width : bar_width / 2 - 7 // able to control the bar width    min 74 max 2000      radial min 30
+		const numth = (canvasWidth - paddingHorizontal) / (graph_type === "bar" ? (bar_width + bar_space) : bar_width) //graph_type === "bar" ? bar_width : bar_width / 2 - 7 // able to control the bar width    min 74 max 2000      radial min 30
 		const barRadius = bar_shape
 		const innerRadius = circle_radius
 		const outerRadius = Math.min(canvasWidth, canvasHeight) / 2;
@@ -82,21 +71,21 @@ export default function GraphContent(props) {
 		const colorGradient = new Gradient();
 		var gardientedColors = [];
 
-		switch (selectedColors.color.length) {
+		switch (graphColor.color.length) {
 			case 2:
-				colorGradient.setGradient(selectedColors.color[0].color, selectedColors.color[1].color);
+				colorGradient.setGradient(graphColor.color[0].color, graphColor.color[1].color);
 				colorGradient.setMidpoint(3);
 				break;
 			case 3:
-				colorGradient.setGradient(selectedColors.color[0].color, selectedColors.color[1].color, selectedColors.color[2].color);
+				colorGradient.setGradient(graphColor.color[0].color, graphColor.color[1].color, graphColor.color[2].color);
 				colorGradient.setMidpoint(5);
 				break;
 			case 4:
-				colorGradient.setGradient(selectedColors.color[0].color, selectedColors.color[1].color, selectedColors.color[2].color, selectedColors.color[3].color);
+				colorGradient.setGradient(graphColor.color[0].color, graphColor.color[1].color, graphColor.color[2].color, graphColor.color[3].color);
 				colorGradient.setMidpoint(7);
 				break;
 			case 5:
-				colorGradient.setGradient(selectedColors.color[0].color, selectedColors.color[1].color, selectedColors.color[2].color, selectedColors.color[3].color, selectedColors.color[4].color);
+				colorGradient.setGradient(graphColor.color[0].color, graphColor.color[1].color, graphColor.color[2].color, graphColor.color[3].color, graphColor.color[4].color);
 				colorGradient.setMidpoint(9);
 				break;
 			default:
@@ -106,7 +95,7 @@ export default function GraphContent(props) {
 		if (colorGradient.getArray().length > 0) {
 			gardientedColors = colorGradient.getArray();
 		} else {
-			gardientedColors = [selectedColors.color[0].color];
+			gardientedColors = [graphColor.color[0].color];
 		}
 
 		var divide_frequency = Math.max(...cus_frequencies) / gardientedColors.length;
@@ -114,7 +103,7 @@ export default function GraphContent(props) {
 		for (let i = 0; i < gardientedColors.length; i++) {
 			divide_frequencies.push(divide_frequency * (i + 1))
 		}
-		if (graphType === "bar") {
+		if (graph_type === "bar") {
 			svgCanvas.selectAll('rect')
 				.data(cus_frequencies).enter()
 				.append('rect')
@@ -219,8 +208,8 @@ export default function GraphContent(props) {
 		}
 	}, [
 		audio_data,
-		selectedColors,
-		graphType,
+		graphColor,
+		graph_type,
 		bar_width,
 		bar_space,
 		circle_radius,

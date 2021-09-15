@@ -13,7 +13,7 @@ const useStyles = makeStyles(styles);
 export default function Backgrounds(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const backgroundColor = useSelector(state => state.color.selectedBackground)
+    const { backgroundColor } = useSelector(state => state.color)
 
     return (
         <React.Fragment>
@@ -22,7 +22,7 @@ export default function Backgrounds(props) {
                     Root.backgroundColors.map((item, i) => (
                         <ListItem key={i} button className={classes.audioListItem} onClick={() => dispatch(selectedBackground(item.color))}>
                             <Grid container alignItems="center">
-                                <Grid style={{backgroundColor: item.color, width: "30px", height: "30px"}}></Grid>
+                                <Grid style={{ backgroundColor: item.color, width: "30px", height: "30px" }}></Grid>
                                 <Typography variant="subtitle1" style={{ marginLeft: "10px" }}>{item.name}</Typography>
                             </Grid>
                             {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,15 +21,14 @@ export default function SoundWaveColors(props) {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const colorsList = useSelector(state => state.color.colorList)
-    const selectedColors = useSelector(state => state.color.selectedColor)
-    const backgroundColor = useSelector(state => state.color.selectedBackground)
+    const { colorsList, graphColor } = useSelector(state => state.color)
     const userData = JSON.parse(localStorage.getItem(Root.key))
 
     const [open, handleOpenModal] = useState(false);
     const [newColorName, setNewColorName] = useState("")
     const [nameCreated, setNameCreated] = useState(false);
     const [colors, setColors] = useState([])
+    const [allColors, setAllColors] = useState([]);
     const [isPublish, setIsPublish] = useState(false);
     const [openAlert, setOpenAlert] = useState({
         open: false,
@@ -65,6 +64,10 @@ export default function SoundWaveColors(props) {
         }
     }
 
+    useEffect(() => {
+        setAllColors(Root.defaultColors.concat(colorsList))
+    }, [colorsList])
+
     return (
         <React.Fragment>
             <Button
@@ -78,7 +81,7 @@ export default function SoundWaveColors(props) {
             </Button>
             <List>
                 {
-                    colorsList.map((item, i) => (
+                    allColors.map((item, i) => (
                         <ListItem key={i} button className={classes.audioListItem} onClick={() => setSelectedColor(item)}>
                             <Grid container className={classes.fColumn}>
                                 <Typography variant="caption" style={{ marginLeft: "2px" }}>{item.name}</Typography>
@@ -91,7 +94,7 @@ export default function SoundWaveColors(props) {
                                 </Grid>
                             </Grid>
                             {
-                                selectedColors && selectedColors._id === item._id ?
+                                graphColor && graphColor._id === item._id ?
                                     <ListItemSecondaryAction className={classNames(classes.dFlex, classes.aCenter)}>
                                         <Done />
                                     </ListItemSecondaryAction>

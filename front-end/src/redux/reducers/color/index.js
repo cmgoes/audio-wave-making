@@ -1,18 +1,20 @@
+import { Root } from "config"
+
 // **  Initial State
 const initialState = {
-    colorList: [],
-    selectedColor: {},
-    selectedBackground: "#FFFFFF"
+    colorsList: [],
+    graphColor: Root.defaultColors[0],
+    backgroundColor: "#FFFFFF"
 }
 
 const color = (state = initialState, action) => {
     switch (action.type) {
         case 'COLORLIST':
-            return { ...state, colorList: action.data }
+            return { ...state, colorsList: action.data }
         case 'SELECTEDCOLOR':
-            return { ...state, selectedColor: action.data }
+            return { ...state, graphColor: action.data }
         case 'SELECTEDBACKGROUND':
-            return { ...state, selectedBackground: action.data }
+            return { ...state, backgroundColor: action.data }
         default:
             return state
     }

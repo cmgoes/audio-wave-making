@@ -9,7 +9,7 @@ const fs = require('fs');
 const { MUSICURL, JSONURL } = require('../db')
 
 exports.uploadAudio = (req, res, next) => {
-    const { user_id } = req.body;
+    const { user_id, color, style, text } = req.body;
     const { filename, originalname } = req.files[0];
     const json_file_name = md5(originalname) + '.json';
 
@@ -19,9 +19,9 @@ exports.uploadAudio = (req, res, next) => {
             return next();
         }
 
-        var sdata = await BSC.data_save({ user_id: user_id, audio_name: filename, json_name: json_file_name, origin_name: originalname, style: {}, text: {} }, AudioModel)
+        var sdata = await BSC.data_save({ user_id: user_id, audio_name: filename, json_name: json_file_name, origin_name: originalname, color: JSON.parse(color), style: JSON.parse(style), text: JSON.parse(text) }, AudioModel)
         if (sdata) {
-            this.getAudios(req, res, next);
+            this.getAudiosByUserId(req, res, next);
         } else {
             return res.json({
                 status: false,
@@ -63,8 +63,9 @@ exports.uploadRecording = async (req, res, next) => {
     })
 }
 
-exports.getAudios = async (req, res, next) => {
-    var data = await BSC.Bfind(AudioModel, {});
+exports.getAudiosByUserId = async (req, res, next) => {
+    const { user_id } = req.body;
+    var data = await BSC.Bfind(AudioModel, { user_id });
     if (data) {
         return res.json({
             status: true,

@@ -38,6 +38,9 @@ export default function UploadAudio(props) {
 
     const audios = useSelector(state => state.audio.audioList)
     const currentAudio = useSelector(state => state.audio.selectedAudio)
+    const { graphColor, backgroundColor } = useSelector(state => state.color)
+    const graph_style = useSelector(state => state.style)
+    const text_style = useSelector(state => state.text)
 
     const uploadAudio = async (e) => {
         if (!e.target.files[0] || (e.target.files[0] && e.target.files[0].type.indexOf("audio") === -1)) {
@@ -45,9 +48,17 @@ export default function UploadAudio(props) {
             return
         }
 
+        const color_style = {
+            color: graphColor._id,
+            backgroundColor
+        }
+
         const formData = new FormData();
         formData.append("audio", e.target.files[0])
         formData.append("user_id", userData._id)
+        formData.append("color", JSON.stringify(color_style))
+        formData.append("style", JSON.stringify(graph_style))
+        formData.append("text", JSON.stringify(text_style))
 
         const response = await Axios({ url: 'api/audio/uploadAudio', data: formData })
         if (response.status) {
@@ -87,10 +98,10 @@ export default function UploadAudio(props) {
     useEffect(() => {
         if (playAudio) {
             playAudio.play();
-            playAudio.addEventListener("ended", function(){
+            playAudio.addEventListener("ended", function () {
                 setPlayAudio(null);
                 setPlayAudioId("");
-           });
+            });
         }
     }, [playAudio])
 
@@ -129,16 +140,16 @@ export default function UploadAudio(props) {
                                     </Grid>
                                 </Grid>
                                 <ListItemSecondaryAction>
-                                {
-                                    playAudioId === item._id ?
-                                        <IconButton edge="end" aria-label="stop music" onClick={() => stopMusic()}>
-                                            <Stop />
-                                        </IconButton>
-                                    :
-                                        <IconButton edge="end" aria-label="play music" onClick={() => playMusic(item._id)}>
-                                            <PlayArrow />
-                                        </IconButton>
-                                }
+                                    {
+                                        playAudioId === item._id ?
+                                            <IconButton edge="end" aria-label="stop music" onClick={() => stopMusic()}>
+                                                <Stop />
+                                            </IconButton>
+                                            :
+                                            <IconButton edge="end" aria-label="play music" onClick={() => playMusic(item._id)}>
+                                                <PlayArrow />
+                                            </IconButton>
+                                    }
                                 </ListItemSecondaryAction>
                             </ListItem>
                         ))
