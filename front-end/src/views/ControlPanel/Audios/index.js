@@ -12,7 +12,7 @@ import { Avatar, Button, Grid, IconButton, List, ListItem, ListItemAvatar, ListI
 import { GraphicEq, PlayArrow, Stop } from "@material-ui/icons";
 import MuiAlert from '@material-ui/lab/Alert';
 import { Axios } from 'redux/services';
-import { audioList, selectedAudio } from 'redux/actions/audio'
+import { audioList, selectedAudio, updateAudioStyle } from 'redux/actions/audio'
 import AudioRecording from "./AudioRecording";
 import { Root } from "config";
 
@@ -38,9 +38,6 @@ export default function UploadAudio(props) {
 
     const audios = useSelector(state => state.audio.audioList)
     const currentAudio = useSelector(state => state.audio.selectedAudio)
-    const { graphColor, backgroundColor } = useSelector(state => state.color)
-    const graph_style = useSelector(state => state.style)
-    const text_style = useSelector(state => state.text)
 
     const uploadAudio = async (e) => {
         if (!e.target.files[0] || (e.target.files[0] && e.target.files[0].type.indexOf("audio") === -1)) {
@@ -49,8 +46,26 @@ export default function UploadAudio(props) {
         }
 
         const color_style = {
-            color: graphColor._id,
-            backgroundColor
+            color: Root.defaultColors[0]._id,
+            backgroundColor: "#FFFFFF"
+        }
+
+        const graph_style = {
+            graph_type: "bar",
+            bar_width: 2,
+            bar_space: 0,
+            circle_radius: 0,
+            circle_rotate: 0,
+            bar_shape: 0
+        }
+
+        const text_style = {
+            displayText: "",
+            textFont: "Alfa Slab One",
+            textColor: "#000000",
+            fontSize: 72,
+            textJustification: 1,
+            textVerticalAlign: 1
         }
 
         const formData = new FormData();
@@ -74,6 +89,17 @@ export default function UploadAudio(props) {
         } else {
             setOpenAlert({ ...openAlert, open: true, status: "error", text: response.data })
         }
+    }
+
+    const loadAudioData = async (item) => {
+        loadAudioJson(item);
+        const response = await Axios({ url: 'api/audio/getAudioStyle', data: { user_id: userData._id, audio_id: item._id } })
+        if (response.status) {
+            dispatch(updateAudioStyle(response.data))
+        } else {
+            setOpenAlert({ ...openAlert, open: true, status: "error", text: response.data })
+        }
+
     }
 
     const makeRecords = () => {
@@ -125,7 +151,7 @@ export default function UploadAudio(props) {
                 <List>
                     {
                         audios.map((item, i) => (
-                            <ListItem key={i} button className={classes.audioListItem} onClick={() => loadAudioJson(item)} style={{ border: currentAudio && currentAudio.id === item._id ? "1px solid #ffba39" : "none" }}>
+                            <ListItem key={i} button className={classes.audioListItem} onClick={() => loadAudioData(item)} style={{ border: currentAudio && currentAudio.id === item._id ? "1px solid #ffba39" : "none" }}>
                                 <ListItemAvatar>
                                     <Avatar>
                                         <GraphicEq />

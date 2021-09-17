@@ -208,6 +208,26 @@ export const colors = [
         "_id": 41,
         "name": 41,
         "color": [{ color: "#d8a47f" }, { color: "#ef8354" }, { color: "#ee4b6a" }, { color: "#df3b57" }, { color: "#0f7173" }]
+    },
+    {
+        "_id": 42,
+        "name": 42,
+        "color": [{ color: "#1446a0" }, { color: "#db3069" }, { color: "#f5d547" }]
+    },
+    {
+        "_id": 43,
+        "name": 43,
+        "color": [{ color: "#668586" }, { color: "#82aeb1" }, { color: "#93c6d6" }]
+    },
+    {
+        "_id": 44,
+        "name": 44,
+        "color": [{ color: "#423e3b" }, { color: "#ff2e00" }, { color: "#fea82f" }]
+    },
+    {
+        "_id": 45,
+        "name": 45,
+        "color": [{ color: "#1a1423" }, { color: "#3d314a" }, { color: "#684756" }]
     }
 ]
 

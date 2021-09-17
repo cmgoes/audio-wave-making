@@ -4,15 +4,21 @@ import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/graph-content.js";
 import { useSelector } from "react-redux";
 import Gradient from "javascript-color-gradient";
+import { Root } from "config";
+import { Axios } from "redux/services";
 
 const useStyles = makeStyles(styles);
 export default function GraphContent(props) {
 	const classes = useStyles();
 
+	const userData = JSON.parse(localStorage.getItem(Root.key))
+
 	const audio_data = useSelector(state => state.audio.selectedAudio)
 	const { graph_type, bar_width, bar_space, circle_radius, circle_rotate, bar_shape } = useSelector(state => state.style)
 	const { backgroundColor, graphColor } = useSelector(state => state.color)
 	const { displayText, textFont, textColor, fontSize, textJustification, textVerticalAlign } = useSelector(state => state.text)
+	const graph_style = useSelector(state => state.style)
+	const text_style = useSelector(state => state.text)
 
 	useEffect(() => {
 		if (!audio_data) return;
@@ -206,6 +212,8 @@ export default function GraphContent(props) {
 			audioText.setAttribute("x", x_text)
 			audioText.setAttribute("y", y_text)
 		}
+
+		updateAudioStyle();
 	}, [
 		audio_data,
 		graphColor,
@@ -223,6 +231,31 @@ export default function GraphContent(props) {
 		textJustification,
 		textVerticalAlign
 	])
+
+	const updateAudioStyle = async () => {
+		const color_style = {
+			color: graphColor._id,
+			backgroundColor
+		}
+
+		if (userData) {
+			const response = await Axios({
+				url: 'api/audio/updateAudioStyles', data: {
+					user_id: userData._id,
+					audio_id: audio_data.id,
+					update_data: {
+						color: color_style,
+						style: graph_style,
+						text: text_style
+					}
+				}
+			})
+
+			if (!response.status) {
+				console.log(`response.data`, response.data)
+			}
+		}
+	}
 
 	return (
 		<div className={classes.graphContent}>

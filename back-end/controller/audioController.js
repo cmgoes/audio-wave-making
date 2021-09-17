@@ -99,3 +99,34 @@ exports.getJson = async (req, res, next) => {
 exports.getDefaultAudio = async (req, res) => {
 
 }
+
+exports.updateAudioStyles = async (req, res) => {
+    const { user_id, audio_id, update_data } = req.body
+    var data = await BSC.BfindOneAndUpdate(AudioModel, { user_id, _id: audio_id }, update_data);
+
+    if (data) {
+        this.getAudioStyle(req, res)
+    } else {
+        return res.json({
+            status: false,
+            data: BSC.TEXT_SERVER_ERROR
+        })
+    }
+}
+
+exports.getAudioStyle = async (req, res) => {
+    const { user_id, audio_id } = req.body;
+    var data = await BSC.BfindOne(AudioModel, { user_id, _id: audio_id })
+
+    if (data) {
+        return res.json({
+            status: true,
+            data
+        })
+    } else {
+        return res.json({
+            status: false,
+            data: BSC.TEXT_SERVER_ERROR
+        })
+    }
+}

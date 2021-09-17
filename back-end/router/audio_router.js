@@ -12,6 +12,8 @@ var Uploader = new UploaderManager(path.join(MUSICURL))
 router.post("/uploadAudio", authMiddleWare.isLoggedIn, multer({ storage: Uploader.storage, fileFilter: Uploader.filter }).any(), audioController.uploadAudio);
 router.post("/uploadRecording", authMiddleWare.isLoggedIn, multer().any(), audioController.uploadRecording);
 router.post("/getAudiosByUserId", authMiddleWare.isLoggedIn, audioController.getAudiosByUserId);
+router.post("/updateAudioStyles", authMiddleWare.isLoggedIn, audioController.updateAudioStyles);
+router.post("/getAudioStyle", authMiddleWare.isLoggedIn, audioController.getAudioStyle);
 router.post("/getDefaultAudio", audioController.getDefaultAudio);
 router.post("/getJson", audioController.getJson);
 

@@ -10,7 +10,7 @@ import styles from "assets/jss/home.js";
 import { colorList, selectedColor } from "redux/actions/color";
 import { useDispatch, useSelector } from "react-redux";
 import { Axios } from "redux/services";
-import { audioList, selectedAudio } from "redux/actions/audio";
+import { audioList, selectedAudio, updateAudioStyle } from "redux/actions/audio";
 import { Root } from "config";
 
 const useStyles = makeStyles(styles);
@@ -83,6 +83,10 @@ export default function Components(props) {
   }, [audios])
 
   const loadJSON = async () => {
+    const audioStyle = await Axios({ url: 'api/audio/getAudioStyle', data: { user_id: userData._id, audio_id: audios[0]._id } })
+    if (audioStyle.status) {
+      dispatch(updateAudioStyle(audioStyle.data))
+    }
     const response = await Axios({ url: 'api/audio/getJson', data: { filename: audios[0].json_name } })
     if (response.status) {
       dispatch(selectedAudio({ id: audios[0]._id, data: response.data }))
