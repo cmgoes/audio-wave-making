@@ -63,7 +63,7 @@ exports.uploadRecording = async (req, res, next) => {
     })
 }
 
-exports.getAudiosByUserId = async (req, res, next) => {
+exports.getAudiosByUserId = async (req, res) => {
     const { user_id } = req.body;
     var data = await BSC.Bfind(AudioModel, { user_id });
     if (data) {
@@ -79,7 +79,7 @@ exports.getAudiosByUserId = async (req, res, next) => {
     }
 }
 
-exports.getJson = async (req, res, next) => {
+exports.getJson = async (req, res) => {
     fs.readFile(`${path.join(JSONURL, req.body.filename)}`, (err, data) => {
         if (err) {
             return res.json({
@@ -97,7 +97,18 @@ exports.getJson = async (req, res, next) => {
 }
 
 exports.getDefaultAudio = async (req, res) => {
-
+    var data = await BSC.Bfind(AudioModel, { user_id: "default_music" });
+    if (data) {
+        return res.json({
+            status: true,
+            data
+        })
+    } else {
+        return res.json({
+            status: false,
+            data: BSC.TEXT_SERVER_ERROR
+        })
+    }
 }
 
 exports.updateAudioStyles = async (req, res) => {

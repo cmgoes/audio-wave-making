@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Header from "components/Header/Header.js";
-import HeaderLinks from "components/Header/HeaderLinks.js";
+// import Header from "components/Header/Header.js";
+// import HeaderLinks from "components/Header/HeaderLinks.js";
 import { Grid } from "@material-ui/core";
 
 import ControlPanel from '../ControlPanel';
@@ -73,11 +73,15 @@ export default function Components(props) {
     const response = await Axios({ url: 'api/audio/getDefaultAudio' })
     if (response.status) {
       dispatch(audioList(response.data))
+      const response1 = await Axios({ url: 'api/audio/getJson', data: { filename: response.data[0].json_name } })
+      if (response1.status) {
+        dispatch(selectedAudio({ id: response.data[0]._id, data: response1.data }))
+      }
     }
   }
 
   useEffect(() => {
-    if (audios.length > 0) {
+    if (audios.length > 0 && userData) {
       loadJSON()
     }
   }, [audios])

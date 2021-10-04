@@ -1,5 +1,6 @@
 const userModel = require("../model/user_model").users;
 const sessionModel = require("../model/user_model").session;
+const AudioModel = require("../model/audio_model").audios;
 const BSC = require("./basecontroller")
 const md5 = require("md5")
 const config = require("../db");
@@ -24,6 +25,29 @@ exports.register = async (req, res) => {
             var session = new sessionModel({ user_id: sdata._id, session_token, expire_time: Date.now() + config.EXPIRE_TIME })
             var sedata = await BSC.data_save(session, sessionModel)
             if (sedata) {
+                const color = {
+                    "color": 0,
+                    "backgroundColor": "#FFFFFF"
+                }
+                const style = {
+                    "graph_type": "bar",
+                    "bar_width": 2,
+                    "bar_space": 0,
+                    "circle_radius": 0,
+                    "circle_rotate": 0,
+                    "bar_shape": 0
+                }
+                const text = {
+                    "displayText": "",
+                    "textFont": "Alfa Slab One",
+                    "textColor": "black",
+                    "fontSize": 72,
+                    "textJustification": 1,
+                    "textVerticalAlign": 1
+                }
+
+                await BSC.data_save({ user_id: sdata._id, audio_name: "25ce7c0fa50a3fb523c9b3c8a24f95cf.mp3", json_name: "79149c4d64bf024ef0ff543c12a46edb.json", origin_name: "Demo Sound File", color, style, text }, AudioModel)
+
                 return res.json({
                     status: true,
                     data: {

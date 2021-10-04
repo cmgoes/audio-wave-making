@@ -3,7 +3,7 @@ import fonts from "./fonts"
 import defaultColors from './colors'
 
 export const Root = {
-    baseurl: "https://5876-188-43-136-33.ngrok.io/",
+    baseurl: "http://localhost:2021/",
     key: "audio_wave_usr",
     sessionKey: "audio_wave_usr_session",
     backgroundColors: backgrounds,
