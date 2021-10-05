@@ -33,6 +33,7 @@ exports.uploadAudio = (req, res, next) => {
 }
 
 exports.uploadRecording = async (req, res, next) => {
+    const { user_id } = req.body;
     const { originalname } = req.files[0];
     const file_name = md5(String(new Date().valueOf())) + "." + req.files[0].mimetype.split("/")[1]
     const json_file_name = md5(String(new Date().valueOf())) + ".json"
@@ -49,9 +50,30 @@ exports.uploadRecording = async (req, res, next) => {
                     return next();
                 }
 
-                var sdata = await BSC.data_save({ user_id: String(Date.now()), audio_name: file_name, json_name: json_file_name, origin_name: originalname }, AudioModel)
+                const color = {
+                    "color": 0,
+                    "backgroundColor": "#FFFFFF"
+                }
+                const style = {
+                    "graph_type": "bar",
+                    "bar_width": 2,
+                    "bar_space": 0,
+                    "circle_radius": 0,
+                    "circle_rotate": 0,
+                    "bar_shape": 0
+                }
+                const text = {
+                    "displayText": "",
+                    "textFont": "Alfa Slab One",
+                    "textColor": "black",
+                    "fontSize": 72,
+                    "textJustification": 1,
+                    "textVerticalAlign": 1
+                }
+
+                var sdata = await BSC.data_save({ user_id: user_id, audio_name: file_name, json_name: json_file_name, origin_name: originalname, color, style, text }, AudioModel)
                 if (sdata) {
-                    this.getAudios(req, res, next);
+                    this.getAudiosByUserId(req, res, next);
                 } else {
                     return res.json({
                         status: false,
