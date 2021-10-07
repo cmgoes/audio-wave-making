@@ -10,6 +10,10 @@ import { Axios } from "redux/services";
 import { ReactMic } from 'react-mic';
 import { audioList } from "redux/actions/audio";
 import { Root } from "config";
+
+import Microm from 'microm'
+
+const microm = new Microm();
 // const MicRecorder = require('mic-recorder-to-mp3');
 
 const useStyles = makeStyles(styles);
@@ -31,7 +35,7 @@ export default function AudioRecording({ open, handleOpenModal }) {
         status: "success",
         text: ""
     })
-    
+
     const userData = JSON.parse(localStorage.getItem(Root.key))
 
     const [record, setRecord] = useState(false);
@@ -48,7 +52,11 @@ export default function AudioRecording({ open, handleOpenModal }) {
                 if (e === 1) {
                     // recorder.start().then(() => {
                     // });
-                    setRecord(true);
+                    microm.startRecording().then(function () {
+                        setRecord(true);
+                    }).catch(function () {
+                        console.log('error recording');
+                    });
                     return clearInterval(couterInterval);
                 }
                 return e - 1
@@ -59,6 +67,14 @@ export default function AudioRecording({ open, handleOpenModal }) {
 
     const stopRecording = () => {
         setRecord(false);
+
+        microm.stop().then(function (result) {
+            // mp3 = result;
+            console.log(result);
+
+            // play();
+            // download();
+        });
         // recorder.stop().getMp3().then(([buffer, blob]) => {
         //         // do what ever you want with buffer and blob
         //         // Example: Create a mp3 file and play
@@ -119,12 +135,12 @@ export default function AudioRecording({ open, handleOpenModal }) {
                 <Fade in={open} >
                     <Paper className={classes.modalBody}>
                         <Grid container alignItems="center" direction="column">
-                            <ReactMic
+                            {/* <ReactMic
                                 record={record}
                                 onStop={onStop}
                                 className={classes.dHidden}
                                 mimeType="audio/mp3"
-                            />
+                            /> */}
                             <div className={classes.micAllow}>
                                 {
                                     beforeRecord ?

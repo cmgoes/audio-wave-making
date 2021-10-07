@@ -155,8 +155,8 @@ export default function GraphContent(props) {
 				.attr("d", d3.arc()     // imagine your doing a part of a donut plot
 					.innerRadius(innerRadius)
 					.outerRadius(d => y(d))
-					.startAngle(d => x(d) + circle_rotate)
-					.endAngle(d => x(d) + x.bandwidth() + circle_rotate)
+					.startAngle(d => x(d) - circle_rotate / (canvasHeight * Math.PI))
+					.endAngle(d => x(d) + x.bandwidth() - circle_rotate / (canvasHeight * Math.PI))
 					// .padAngle(bar_space)
 				)
 		}

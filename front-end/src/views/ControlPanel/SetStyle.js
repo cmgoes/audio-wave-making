@@ -182,7 +182,7 @@ export default function SetStyle(props) {
                 value={circle_rotate}
                 min={0}
                 step={1}
-                max={7}
+                max={360}
                 onChange={(e, value) => {
                   dispatch(handleRotate(value));
                   dispatch(updateAudioStyles());
