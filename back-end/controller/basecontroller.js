@@ -3,6 +3,9 @@ const timermoment = require('moment')
 var crypto = require('crypto');
 const url = require('url');
 const fs = require("fs");
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const ffmpeg = require('fluent-ffmpeg');
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 const ENCRYPTION_KEY = "e807f1fcf82d132f9bb018ca6738a19f"; // Must be 256 bits (32 characters)
 const IV_LENGTH = 16; // For AES, this is always 16
@@ -62,6 +65,17 @@ exports.Bfind = async (model, condition = {}) => {
 	} catch (e) {
 		return false;
 	}
+}
+
+exports.convert = (input, output, callback) => {
+    ffmpeg(input)
+        .output(output)
+        .on('end', function() {                    
+            callback(null);
+        }).on('error', function(err){
+            console.log('error: ', err);
+            callback(err);
+        }).run();
 }
 
 exports.BfindSort = async (model, condition = {}) => {

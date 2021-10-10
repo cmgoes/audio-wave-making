@@ -11,11 +11,6 @@ import { ReactMic } from 'react-mic';
 import { audioList } from "redux/actions/audio";
 import { Root } from "config";
 
-import Microm from 'microm'
-
-const microm = new Microm();
-// const MicRecorder = require('mic-recorder-to-mp3');
-
 const useStyles = makeStyles(styles);
 
 function Alert(props) {
@@ -26,9 +21,6 @@ function Alert(props) {
 export default function AudioRecording({ open, handleOpenModal }) {
     const classes = useStyles();
     const dispatch = useDispatch();
-    // const recorder = new MicRecorder({
-    //     bitRate: 128
-    // });
 
     const [openAlert, setOpenAlert] = useState({
         open: false,
@@ -46,66 +38,30 @@ export default function AudioRecording({ open, handleOpenModal }) {
     }, [couter])
 
     const startRecording = () => {
-        setBeforeRecord(true);
-        var couterInterval = setInterval(() => {
-            setCouter(e => {
-                if (e === 1) {
-                    // recorder.start().then(() => {
-                    // });
-                    microm.startRecording().then(function () {
-                        setRecord(true);
-                    }).catch(function () {
-                        console.log('error recording');
-                    });
-                    return clearInterval(couterInterval);
-                }
-                return e - 1
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function (stream) {
+                setBeforeRecord(true);
+                
+                var couterInterval = setInterval(() => {
+                    setCouter(e => {
+                        if (e === 1) {
+                            setRecord(true);
+                            return clearInterval(couterInterval);
+                        }
+                        return e - 1
+                    })
+                }, 1000)
             })
-        }, 1000)
-        // setRecord(true)
+            .catch(function (err) {
+                console.log('No mic for you!')
+            });
     }
 
     const stopRecording = () => {
         setRecord(false);
-
-        microm.stop().then(function (result) {
-            // mp3 = result;
-            console.log(result);
-
-            // play();
-            // download();
-        });
-        // recorder.stop().getMp3().then(([buffer, blob]) => {
-        //         // do what ever you want with buffer and blob
-        //         // Example: Create a mp3 file and play
-        //         // const file = new File(buffer, 'me-at-thevoice.mp3', {
-        //         //     type: blob.type,
-        //         //     lastModified: Date.now()
-        //         // });
-
-        //         console.log(`buffer`, buffer, blob)
-
-        //         // const player = new Audio(URL.createObjectURL(file));
-        //         // player.play();
-
-        //     }).catch((e) => {
-        //         alert('We could not retrieve your message');
-        //         console.log(e);
-        //     });
     }
 
     const onStop = async (recordedBlob) => {
-        console.log(`recordedBlob`, recordedBlob)
-        // let reader = new FileReader();
-        // reader.readAsDataURL(recordedBlob.blob); // converts the blob to base64 and calls onload
-
-        // reader.onload = function () {
-        //     // console.log(`reader.result`, reader.result)
-        // };
-        // const extension = recordedBlob.blob.type.split("/")[1]
-        // const recorded_audio = new File([recordedBlob.blob], `Recording.${extension}`, { type: recordedBlob.options.mimeType })
-        // console.log(`recorded_audio`, recorded_audio)
-
         const formData = new FormData();
         formData.append("audio", recordedBlob.blob, 'Recording.mp3')
         formData.append("user_id", userData._id)
@@ -135,12 +91,12 @@ export default function AudioRecording({ open, handleOpenModal }) {
                 <Fade in={open} >
                     <Paper className={classes.modalBody}>
                         <Grid container alignItems="center" direction="column">
-                            {/* <ReactMic
+                            <ReactMic
                                 record={record}
                                 onStop={onStop}
                                 className={classes.dHidden}
-                                mimeType="audio/mp3"
-                            /> */}
+                                mimeType="audio/webm"
+                            />
                             <div className={classes.micAllow}>
                                 {
                                     beforeRecord ?

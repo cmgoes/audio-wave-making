@@ -5,6 +5,9 @@ const Buffer = require('buffer/').Buffer
 const path = require('path');
 const md5 = require('md5')
 const fs = require('fs');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const ffmpeg = require('fluent-ffmpeg');
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 const { MUSICURL, JSONURL } = require('../db')
 
@@ -44,43 +47,52 @@ exports.uploadRecording = async (req, res, next) => {
                 data: BSC.TEXT_FAILED_CREATING_RECORD
             })
         } else {
-            exec(`audiowaveform -i ${path.join(MUSICURL, file_name)} -o ${path.join(JSONURL, json_file_name)}`, async (err, stdout, stderr) => {
-                if (err) {
-                    console.error(err);
-                    return next();
-                }
-
-                const color = {
-                    "color": 0,
-                    "backgroundColor": "#FFFFFF"
-                }
-                const style = {
-                    "graph_type": "bar",
-                    "bar_width": 2,
-                    "bar_space": 0,
-                    "circle_radius": 0,
-                    "circle_rotate": 0,
-                    "bar_shape": 0
-                }
-                const text = {
-                    "displayText": "",
-                    "textFont": "Alfa Slab One",
-                    "textColor": "black",
-                    "fontSize": 72,
-                    "textJustification": 1,
-                    "textVerticalAlign": 1
-                }
-
-                var sdata = await BSC.data_save({ user_id: user_id, audio_name: file_name, json_name: json_file_name, origin_name: originalname, color, style, text }, AudioModel)
-                if (sdata) {
-                    this.getAudiosByUserId(req, res, next);
-                } else {
-                    return res.json({
-                        status: false,
-                        data: BSC.TEXT_SERVER_ERROR
+            const me = this;
+            const new_file_name = file_name.split(".")[0] + ".mp3"
+            BSC.convert(path.join(MUSICURL, file_name), path.join(MUSICURL, new_file_name), function(err){
+                if(!err) {
+                    exec(`audiowaveform -i ${path.join(MUSICURL, new_file_name)} -o ${path.join(JSONURL, json_file_name)}`, async (err, stdout, stderr) => {
+                        if (err) {
+                            console.error(err);
+                            return next();
+                        }
+        
+                        const color = {
+                            "color": 0,
+                            "backgroundColor": "#FFFFFF"
+                        }
+                        const style = {
+                            "graph_type": "bar",
+                            "bar_width": 20,
+                            "bar_space": 0,
+                            "circle_radius": 0,
+                            "circle_rotate": 0,
+                            "bar_shape": 0
+                        }
+                        const text = {
+                            "displayText": "",
+                            "textFont": "Alfa Slab One",
+                            "textColor": "black",
+                            "fontSize": 72,
+                            "textJustification": 1,
+                            "textVerticalAlign": 1
+                        }
+        
+                        var sdata = await BSC.data_save({ user_id: user_id, audio_name: new_file_name, json_name: json_file_name, origin_name: originalname, color, style, text }, AudioModel)
+                        if (sdata) {
+                            me.getAudiosByUserId(req, res, next);
+                        } else {
+                            return res.json({
+                                status: false,
+                                data: BSC.TEXT_SERVER_ERROR
+                            })
+                        }
+                    });
+                    fs.unlink(path.join(MUSICURL, file_name), (err) => {
+                        if (err) throw err;
                     })
                 }
-            });
+             });
         }
     })
 }
@@ -163,3 +175,29 @@ exports.getAudioStyle = async (req, res) => {
         })
     }
 }
+
+/**
+ *    input - string, path of input file
+ *    output - string, path of output file
+ *    callback - function, node-style callback fn (error, result)        
+ */
+// function convert(input, output, callback) {
+//     ffmpeg(input)
+//         .output(output)
+//         .on('end', function() {                    
+//             console.log('conversion ended');
+//             callback(null);
+//         }).on('error', function(err){
+//             console.log('error: ', err);
+//             callback(err);
+//         }).run();
+// }
+
+// function run() {
+    // convert(path.join(MUSICURL, 'recording.webm'), path.join(MUSICURL, 'recording.mp3'), function(err){
+    //    if(!err) {
+    //        console.log('conversion complete');
+    //        //...
+    //    }
+    // });
+// }
