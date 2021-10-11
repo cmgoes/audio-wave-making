@@ -75,7 +75,10 @@ const popoverStyles = {
         height: "135px",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        '&:hover': {
+            cursor: "pointer",
+        }
     },
     alignIcons: {
         padding: "5px",

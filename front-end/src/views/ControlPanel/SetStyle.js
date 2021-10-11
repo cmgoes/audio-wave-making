@@ -85,7 +85,7 @@ export default function SetStyle(props) {
         </Grid>
       </Grid>
       <Grid className={classes.divideBar}></Grid>
-      <Grid className={classes.ph10}>
+      <Grid className={classes.ph20}>
         <Grid
           className={classNames(classes.mt20)}
           container
@@ -182,7 +182,7 @@ export default function SetStyle(props) {
                 value={circle_rotate}
                 min={0}
                 step={1}
-                max={7}
+                max={360}
                 onChange={(e, value) => {
                   dispatch(handleRotate(value));
                   dispatch(updateAudioStyles());
