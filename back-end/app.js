@@ -4,12 +4,22 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const config = require('./db')
 const app = express()
-const server = require("http").Server(app)
+var https = require('https');
 const router = require("./router")
 const path = require("path")
+var fs = require('fs');
+
 const {
   seedAudio
 } = require("./model/db_seeder");
+
+
+var options = {
+  key: fs.readFileSync("./certificates/privkey.pem"),
+  cert: fs.readFileSync("./certificates/cert.pem")
+};
+
+const server = https.createServer(options, app)
 
 const DBURL = process.env.NODE_ENV == "development" ? config.TESTDB : config.PRODB
 const ServerPort = process.env.NODE_ENV == "development" ? config.DevServerPort : config.ServerPort
@@ -36,7 +46,7 @@ mongoose.connect(DBURL, { useNewUrlParser: true, useFindAndModify: false, useUni
   })
 
   server.listen(ServerPort, () => {
-    console.log(`Started server on => http://localhost:${ServerPort}`)
+    console.log(`Started server on => https://localhost:${ServerPort}`)
   })
 },
   err => {
