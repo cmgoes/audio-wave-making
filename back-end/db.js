@@ -8,6 +8,6 @@ module.exports = {
     "PRODB": "mongodb://localhost:27017/soundviz",
     "TESTDB": "mongodb://localhost:27017/soundviz",
     "DevServerPort": 2021,
-    "ServerPort": 80,
+    "ServerPort": 443,
     "EXPIRE_TIME": 1000 * 3600 * 48
 }
