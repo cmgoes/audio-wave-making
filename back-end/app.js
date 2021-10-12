@@ -12,6 +12,7 @@ const {
 } = require("./model/db_seeder");
 
 const DBURL = process.env.NODE_ENV == "development" ? config.TESTDB : config.PRODB
+const ServerPort = process.env.NODE_ENV == "development" ? config.DevServerPort : config.ServerPort
 
 mongoose.connect(DBURL, { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true, useCreateIndex: true }).then(() => {
   console.log('Database is connected')
@@ -34,8 +35,8 @@ mongoose.connect(DBURL, { useNewUrlParser: true, useFindAndModify: false, useUni
     res.sendFile(path.join(config.DIR, 'clients/index.html'))
   })
 
-  server.listen(config.ServerPort, () => {
-    console.log(`Started server on => http://localhost:${config.ServerPort}`)
+  server.listen(ServerPort, () => {
+    console.log(`Started server on => http://localhost:${ServerPort}`)
   })
 },
   err => {
