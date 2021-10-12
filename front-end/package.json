@@ -41,6 +41,7 @@
     "@babel/preset-env": "7.14.1",
     "@babel/preset-react": "7.13.13",
     "@iconify/react": "^3.0.1",
+    "cross-env": "^7.0.3",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "3.4.0",
     "eslint-plugin-react": "7.23.2",
@@ -52,8 +53,8 @@
     "typescript": "4.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build && gulp licenses",
+    "start": "cross-env NODE_ENV=development react-scripts start",
+    "build": "cross-env NODE_ENV=production react-scripts build && gulp licenses",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint:check": "eslint . --ext=js,jsx;  exit 0",
